@@ -1,3 +1,5 @@
 <resources>
+    <!--所有的字符串必须要进行写在这里面-->
     <string name="app_name">HelloWorld</string>
+    <string name="hello_world">Hello_World</string>
 </resources>
