@@ -8,9 +8,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+/**
+ * @author  heshengjin
+ * @date 2017-10-18
+ * 第二个activity
+ */
 public class SecondActivity extends BaseActivity {
 
+    private static final String TAG = "SecondActivity";
+
+    /**
+     * 提供给其他的activity调用
+     * @param context
+     * @param data1
+     * @param data2
+     */
     public static void actionStart(Context context, String data1, String data2) {
         Intent intent = new Intent(context, SecondActivity.class);
         intent.putExtra("param1", data1);
@@ -18,11 +30,21 @@ public class SecondActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    /**
+     * 创建activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("SecondActivity", "Task id is " + getTaskId());
+        Log.d(TAG, "Task id is " + getTaskId());
         setContentView(R.layout.second_layout);
+
+        Intent i =  getIntent();
+        String str = i.getStringExtra("param1");
+        //toast测试intent参数获取
+        Toast.makeText(SecondActivity.this,str,Toast.LENGTH_SHORT).show();
+
         Button button2 = (Button) findViewById(R.id.button_2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +63,9 @@ public class SecondActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: bpbpbpbpbpbpbp");
         Intent intent = new Intent();
-        intent.putExtra("data_return", "Hello FirstActivity");
+        intent.putExtra("data_return", "Hello FirstActivity i am back from SecondActivity");
         setResult(RESULT_OK, intent);
         finish();
     }

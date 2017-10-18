@@ -8,35 +8,35 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!--第一个Activity  android:label="This is FirstActivity"这个会导致app名称变成这个-->
         <activity
             android:name=".FirstActivity"
             android:label="This is FirstActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--第二个Activity-->
         <activity
             android:name=".SecondActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="com.example.activitytest.ACTION_START" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.example.activitytest.MY_CATEGORY" />
             </intent-filter>
         </activity>
+<!--第三Activity-->
         <activity android:name=".ThirdActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="http" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
