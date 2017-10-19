@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="gyGrey">#E5E5E5</color>
+    <color name="gyGreen">#CAFF70</color>
+    <color name="gyDeepGreen">#9AFF9A</color>
 </resources>
