@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">ActivityTest</string>
-    <string name="firstActivityButton_1">Button 1</string>
+    <string name="firstActivityButton_1">Button 1_show_intent</string>
+    <string name="firstActivityButton_2">Button 2_hiden_intent</string>
     <string name="SecondActivityButton_2">Button 2</string>
+    <string name="thirdActivityButton_1">Button 3</string>
 </resources>

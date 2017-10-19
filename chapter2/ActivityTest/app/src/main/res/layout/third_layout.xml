@@ -8,7 +8,7 @@
         android:id="@+id/button_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button 3"
+        android:text="@string/thirdActivityButton_1"
         />
 
 </LinearLayout>

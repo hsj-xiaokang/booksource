@@ -45,6 +45,7 @@ public class SecondActivity extends BaseActivity {
         //toast测试intent参数获取
         Toast.makeText(SecondActivity.this,str,Toast.LENGTH_SHORT).show();
 
+        //添加事件按钮
         Button button2 = (Button) findViewById(R.id.button_2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,9 +62,14 @@ public class SecondActivity extends BaseActivity {
         Log.d("SecondActivity", "onDestroy");
     }
 
+    /**
+     * 带参数的返回第一个activity
+     * 相当于back按钮键
+     * 不覆盖的时会自己调用 finish();
+     */
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed: bpbpbpbpbpbpbp");
+        Log.d(TAG, "onBackPressed method");
         Intent intent = new Intent();
         intent.putExtra("data_return", "Hello FirstActivity i am back from SecondActivity");
         setResult(RESULT_OK, intent);

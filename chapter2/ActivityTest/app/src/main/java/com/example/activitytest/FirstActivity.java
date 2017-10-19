@@ -17,9 +17,13 @@ import android.widget.Toast;
  * @date 2017-10-18
  * 第一个activity
  */
-public class FirstActivity extends BaseActivity {
+public class FirstActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "FirstActivity";
     private final static int REQUESTCODE = 1; // 返回的结果码
+    private  Button button1;
+    private  Button button2;
+    private final static String INTENTHIDEN_TO_SECONDACTIVITY_ACTION = "com.example.activitytest.ACTION_START";
+    private final static String INTENTHIDEN_TO_DECONDACTVITY_CATEGORY = "com.example.activitytest.MY_CATEGORY";
 
     /**
      * activity启动时候
@@ -39,28 +43,11 @@ public class FirstActivity extends BaseActivity {
 //        }
 
         setContentView(R.layout.first_layout);
-        Button button1 = (Button) findViewById(R.id.button_1);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //toast测试
-                 Toast.makeText(FirstActivity.this,"you click button 1",Toast.LENGTH_SHORT).show();
-                //没有传递参数的intent
-//                Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
-//                startActivity(intent);
-                //传递参数
-//                 SecondActivity.actionStart(FirstActivity.this, "data1", "data2");
+         button1 = (Button) findViewById(R.id.button_1);
+         button1.setOnClickListener(this);
+         button2 = (Button) findViewById(R.id.button_2);
+         button2.setOnClickListener(this);
 
-                //有返回结果
-                // 意图实现activity的跳转
-                 Intent intent = new Intent(FirstActivity.this,
-                         SecondActivity.class);
-                 intent.putExtra("param1", "data1");
-                 intent.putExtra("param2", "data2");
-                 startActivityForResult(intent, REQUESTCODE); //REQUESTCODE--->1
-
-            }
-        });
     }
 
     @Override
@@ -119,4 +106,51 @@ public class FirstActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 事件的方式推荐
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+    switch (v.getId()){
+        case R.id.button_1:
+                    //toast测试
+                    Toast.makeText(FirstActivity.this,"you click button 1",Toast.LENGTH_SHORT).show();
+
+                    //没有传递参数的intent
+//                Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+//                startActivity(intent);
+
+                    //传递参数
+//                 SecondActivity.actionStart(FirstActivity.this, "data1", "data2");
+
+                    //有返回结果
+                    // 意图实现activity的跳转
+                    Intent intent = new Intent(FirstActivity.this,
+                            SecondActivity.class);
+                    intent.putExtra("param1", "data1");
+                    intent.putExtra("param2", "data2");
+                    startActivityForResult(intent, REQUESTCODE); //REQUESTCODE--->1
+
+        break;
+        case R.id.button_2:
+            //隐式intent
+//            Intent intent_hiden = new Intent(INTENTHIDEN_TO_SECONDACTIVITY_ACTION);
+//            intent_hiden.addCategory(INTENTHIDEN_TO_DECONDACTVITY_CATEGORY);
+//            intent_hiden.putExtra("param1", "data1");
+//            startActivity(intent_hiden);
+
+            //隐式的方式实现多个程序之间共享 比如打开系统浏览器
+//            Intent intent_browse = new Intent(Intent.ACTION_VIEW);
+//            intent_browse.setData(Uri.parse("http://www.baidu.com"));
+//            startActivity(intent_browse);
+
+            //隐式的方式实现多个程序之间共享 比如打开系统电话
+            Intent intent_phone = new Intent(Intent.ACTION_DIAL);
+            intent_phone.setData(Uri.parse("tel:10086"));
+            startActivity(intent_phone);
+        default:break;
+
+     }
+    }
 }
