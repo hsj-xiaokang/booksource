@@ -37,7 +37,7 @@ public class SecondActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "Task id is " + getTaskId());
+        Log.d(TAG, "Task id is--------------------------------------------------------------------------SecondActivity》 " + getTaskId());
         setContentView(R.layout.second_layout);
 
         Intent i =  getIntent();

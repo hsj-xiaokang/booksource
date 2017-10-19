@@ -9,10 +9,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 <!--第一个Activity  android:label="This is FirstActivity"这个会导致app名称变成这个-->
+        <!--android:launchMode="standard"  这个是默认的模式，每次启动创建一个activity，只要启动就创建，实例>1
+            android:launchMode="singleTop" 当栈顶是该activity的时候，不用创建，实例>1
+            android:launchMode="singleTask" 改activity实例只会存在一个，没有就创建一个在栈顶，否则就该activity上面的所有activity出栈，自己成为栈顶，，实例=1
+
+           android:launchMode="singleInstance" 一个新的返回栈管理该activity，多个应用程序可以共享该活动实例，实例=1
+        -->
         <activity
             android:name=".FirstActivity"
-            android:label="This is FirstActivity"
-            android:launchMode="singleTask">
+            android:label="This is FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

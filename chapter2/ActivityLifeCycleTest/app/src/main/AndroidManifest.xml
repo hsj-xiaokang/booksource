@@ -8,18 +8,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!-- 一主活动-->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!-- 二普通的activity-->
         <activity android:name=".NormalActivity">
         </activity>
+
+<!-- 三dialog形式的activity -->
         <activity android:name=".DialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog">
         </activity>
+
     </application>
 
 </manifest>

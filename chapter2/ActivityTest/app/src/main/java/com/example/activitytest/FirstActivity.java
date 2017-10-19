@@ -16,6 +16,9 @@ import android.widget.Toast;
  * @author  heshengjin
  * @date 2017-10-18
  * 第一个activity
+ *
+ *
+ * startActivityForResult会引发singleInstance模式的异常情况
  */
 public class FirstActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "FirstActivity";
@@ -33,7 +36,7 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "Task id is " + getTaskId());
+        Log.d(TAG, "Task id is --------------------------------------------------FirstActivity 》" + getTaskId());
 
         //去掉顶部标题项  导入类-------> ctrl+alt+space
 //        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -122,15 +125,16 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener{
 //                startActivity(intent);
 
                     //传递参数
-//                 SecondActivity.actionStart(FirstActivity.this, "data1", "data2");
+                 SecondActivity.actionStart(FirstActivity.this, "data1", "data2");
 
                     //有返回结果
                     // 意图实现activity的跳转
-                    Intent intent = new Intent(FirstActivity.this,
-                            SecondActivity.class);
-                    intent.putExtra("param1", "data1");
-                    intent.putExtra("param2", "data2");
-                    startActivityForResult(intent, REQUESTCODE); //REQUESTCODE--->1
+                    //*************会引发singleInstance模式的异常情况*************
+//                    Intent intent = new Intent(FirstActivity.this,
+//                            SecondActivity.class);
+//                    intent.putExtra("param1", "data1");
+//                    intent.putExtra("param2", "data2");
+//                    startActivityForResult(intent, REQUESTCODE); //REQUESTCODE--->1
 
         break;
         case R.id.button_2:

@@ -18,13 +18,15 @@ public class ThirdActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "Task id is " + getTaskId());
+        Log.d(TAG, "Task id is -------------------------------------------------------ThirdActivity》" + getTaskId());
         setContentView(R.layout.third_layout);
         Button button3 = (Button) findViewById(R.id.button_3);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //销毁所有的activity
                 ActivityCollector.finishAll();
+                //杀死进程
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
