@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case 1:
                     Toast.makeText(MainActivity.this,msg.arg1 + "  " + msg.arg2,Toast.LENGTH_SHORT).show();
                     break;
+                default:break;
             }
         }
     };
