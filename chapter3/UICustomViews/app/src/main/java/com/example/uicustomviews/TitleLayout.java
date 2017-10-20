@@ -14,7 +14,15 @@ import com.example.uicustomviews.counstomEvents.EditEventsProcess;
 import com.example.uicustomviews.utils.ObjectUtils;
 
 /**
+ * @author hsj
+ * @date 2017-10-20
  * 自定义组件标题栏
+ *
+ * 使用时候先隐藏系统隐藏标题栏
+      ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+        actionbar.hide();
+       }
  */
 public class TitleLayout extends LinearLayout implements View.OnClickListener{
     //标题栏
@@ -74,6 +82,59 @@ public class TitleLayout extends LinearLayout implements View.OnClickListener{
             titleBack.setText(BACK);
         }
         titleBack.setText(titleBackContent);
+    }
+
+    /**
+     * 设置文本可见性
+     * 默认显示
+     第一种    gone         表示不可见并且不占用空间
+
+     第二种    visible       表示可见
+
+     第三种    invisible    表示不可见但是占用空间
+     */
+    public void showTextView(boolean show){
+        if(show){
+            textView.setVisibility(View.VISIBLE);
+        }else{
+            textView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置编辑可见性
+     * 默认显示
+     */
+    public void showTitleEdit(boolean show){
+        if(show){
+            titleEdit.setVisibility(View.VISIBLE);
+        }else{
+            titleEdit.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置返回可见性
+     *  默认显示
+     */
+    public void showTitleBack(boolean show){
+        if(show){
+            titleBack.setVisibility(View.VISIBLE);
+        }else{
+            titleBack.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置返回可见性
+     *  默认显示
+     */
+    public void allShow(boolean show){
+        if(show){
+            this.setVisibility(View.VISIBLE);
+        }else{
+            this.setVisibility(View.GONE);
+        }
     }
 
     /**

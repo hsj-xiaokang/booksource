@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         titleLayout.setTextView(TAG);
         titleLayout.setTitleEdit(EDIT);
         titleLayout.setTitleBack(BACK);
+        //测试显不显示
+        titleLayout.showTitleEdit(false);
+
         //初始化EditEventsProcess,重写EditEventsProcess.doEvents方法
         //设置setEditEventsProcess(EditEventsProcess editEventsProcess)
         titleLayout.setEditEventsProcess(new EditEventsProcess(){
