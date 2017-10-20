@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * https://github.com/niniloveyou/SwipeRecyclerView
+ * SwipeRefreshLayout + RecyclerView 实现的下拉刷新，上拉加载更多
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private List<Fruit> fruitList = new ArrayList<Fruit>();
@@ -18,15 +23,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+         //初始化数据
         initFruits();
+        //RecyclerView控件
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        //第一个参数控制列数
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        //设置Manager
         recyclerView.setLayoutManager(layoutManager);
+         //Adapter设置数据
         FruitAdapter adapter = new FruitAdapter(fruitList);
+        //RecyclerView控件设置Adapter
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * 初始化数据
+     */
     private void initFruits() {
         for (int i = 0; i < 2; i++) {
             Fruit apple = new Fruit(getRandomLengthName("Apple"), R.drawable.apple_pic);
@@ -52,7 +65,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 名字
+     * @param name
+     * @return
+     */
     private String getRandomLengthName(String name) {
+        if(name != null){
+            return name;
+        }
         Random random = new Random();
         int length = random.nextInt(20) + 1;
         StringBuilder builder = new StringBuilder();

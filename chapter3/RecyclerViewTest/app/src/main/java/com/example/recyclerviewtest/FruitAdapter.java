@@ -33,8 +33,11 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder>{
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_item, parent, false);
+
         final ViewHolder holder = new ViewHolder(view);
+
         holder.fruitView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
