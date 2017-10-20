@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.listviewtest.utils.ObjectUtils;
+
 import java.util.List;
 
 public class FruitAdapter extends ArrayAdapter<Fruit> {
@@ -25,7 +27,7 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
         Fruit fruit = getItem(position); // 获取当前项的Fruit实例
         View view;
         ViewHolder viewHolder;
-        if (convertView == null) {
+        if (ObjectUtils.isEmpty(convertView)) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.fruitImage = (ImageView) view.findViewById (R.id.fruit_image);
