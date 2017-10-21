@@ -16,7 +16,7 @@ import java.util.Random;
  */
 
 public class MainActivity extends AppCompatActivity {
-
+    //数据源
     private List<Fruit> fruitList = new ArrayList<Fruit>();
 
     @Override
