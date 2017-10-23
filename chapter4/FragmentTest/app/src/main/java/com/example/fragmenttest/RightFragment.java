@@ -7,31 +7,52 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class RightFragment extends Fragment {
 
     public static final String TAG = "RightFragment";
 
+    /**
+     * 碎片和活动建立关联的时候调用
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
     }
 
+    /**
+     * 碎片创建
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
     }
 
+    /**
+     * 创建view（加载布局时候）
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.right_fragment, container, false);
         return view;
     }
 
+    /**
+     * 碎片与关联的活动一定创建的时候
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -62,6 +83,9 @@ public class RightFragment extends Fragment {
         Log.d(TAG, "onStop");
     }
 
+    /**
+     * 碎片关联的活动被移除的时候
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -74,6 +98,9 @@ public class RightFragment extends Fragment {
         Log.d(TAG, "onDestroy");
     }
 
+    /**
+     * 碎片和活动解除关联的时候
+     */
     @Override
     public void onDetach() {
         super.onDetach();

@@ -10,4 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <!--静态添加碎片-->
+<!--    <fragment
+        android:id="@+id/right_fragment"
+        android:name="com.example.fragmenttest.RightFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+    <!--动态添加碎片,把FrameLayout布局换成碎片,动态的碎片需要一个布局容器-->
+    <!--<FrameLayout
+        android:id="@+id/right_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />-->
+
 </LinearLayout>
