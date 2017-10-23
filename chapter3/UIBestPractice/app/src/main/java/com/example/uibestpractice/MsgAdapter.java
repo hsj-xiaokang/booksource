@@ -9,10 +9,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * 使用RecyclerView
+ */
 public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
-
+    //数据list
     private List<Msg> mMsgList;
 
+    /**
+     * ViewHolder类
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout leftLayout;
@@ -23,8 +29,13 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
 
         TextView rightMsg;
 
+        /**
+         * View view参数就是布局文件
+         * @param view
+         */
         public ViewHolder(View view) {
             super(view);
+
             leftLayout = (LinearLayout) view.findViewById(R.id.left_layout);
             rightLayout = (LinearLayout) view.findViewById(R.id.right_layout);
             leftMsg = (TextView) view.findViewById(R.id.left_msg);
@@ -32,19 +43,26 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * 构造函数
+     * @param msgList
+     */
     public MsgAdapter(List<Msg> msgList) {
         mMsgList = msgList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //加载布局文件
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.msg_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //根据position获取当前条目
         Msg msg = mMsgList.get(position);
+
         if (msg.getType() == Msg.TYPE_RECEIVED) {
             // 如果是收到的消息，则显示左边的消息布局，将右边的消息布局隐藏
             holder.leftLayout.setVisibility(View.VISIBLE);
@@ -58,6 +76,10 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * 获取总数
+     * @return
+     */
     @Override
     public int getItemCount() {
         return mMsgList.size();
