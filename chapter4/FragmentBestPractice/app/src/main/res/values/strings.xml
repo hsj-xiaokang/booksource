@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FragmentBestPractice</string>
+    <string name="app_nhmd">no have more data!</string>
+    <string name="app_thae">there have a error!</string>
+    <string name="app_ne">net error!</string>
+    <string name="app_title">This is news title</string>
+    <string name="app_content">This is news content</string>
 </resources>

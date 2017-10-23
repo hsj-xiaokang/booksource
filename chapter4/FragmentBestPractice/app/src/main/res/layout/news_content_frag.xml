@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="invisible" >
-
+        <!--标题-->
         <TextView
             android:id="@+id/news_title"
             android:layout_width="match_parent"
@@ -17,12 +17,12 @@
             android:gravity="center"
             android:padding="10dp"
             android:textSize="20sp" />
-
+        <!--分割的横线-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000" />
-
+      <!--内容-->
         <TextView
             android:id="@+id/news_content"
             android:layout_width="match_parent"
@@ -32,8 +32,9 @@
             android:textSize="18sp" />
 
     </LinearLayout>
-
+   <!--分割的竖线-->
     <View
+        android:id="@+id/left_line"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
