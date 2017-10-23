@@ -7,5 +7,8 @@
 
 
 我自己fork从大神的github仓库：https://github.com/guolindev/booksource
-本人学习过程中添加自己的理解的注释和一些功能的补充：
-                                                  比如限于篇幅，郭霖大神讲解listView RecyclerView中没有下拉刷新上拉加载功能，我有集成了该功能，使用到某些大神的github代码我都注明仓库地址，没有注明的请谅解
+本人学习过程中添加自己的理解的注释和一些功能的补充（使用到某些大神的github代码我都注明仓库地址，没有注明的请谅解）：
+                                                  一：比如限于篇幅，郭霖大神讲解listView RecyclerView中没有下拉刷新上拉加载功能，
+												  我有集成了该功能，RecyclerView方式： * https://github.com/niniloveyou/SwipeRecyclerView      * SwipeRefreshLayout + RecyclerView 实现的下拉刷新，上拉加载更多；
+												                    listView方式：     * https://github.com/chrisbanes/Android-PullToRefresh   * listView 实现的下拉刷新，上拉加载更多；
+																																					
