@@ -37,22 +37,22 @@ public class NewsTitleFragment extends Fragment {
     //模拟http请求的耗时间毫秒1000
     private final static int HTTP_TIME_SIMULATE = 1000;
     //模拟数据的条数
-    private int NUM_0 = 0;
-    private int NUM_1 = 1;
-    private int NUM_2 = 2;
-    private int NUM_3 = 3;
-    private int NUM_4 = 4;
-    private int NUM_5 = 5;
-    private int NUM_6 = 6;
-    private int NUM_7 = 7;
-    private int NUM_8 = 8;
-    private int NUM_9 = 9;
-    private int NUM_10 = 10;
-    private int NUM_11 = 11;
-    private int NUM_12 = 12;
-    private int NUM_13 = 13;
-    private int NUM_14 = 14;
-    private int NUM_15 = 15;
+    private final static int NUM_0 = 0;
+    private final static int NUM_1 = 1;
+    private final static int NUM_2 = 2;
+    private final static int NUM_3 = 3;
+    private final static int NUM_4 = 4;
+    private final static int NUM_5 = 5;
+    private final static int NUM_6 = 6;
+    private final static int NUM_7 = 7;
+    private final static int NUM_8 = 8;
+    private final static int NUM_9 = 9;
+    private final static int NUM_10 = 10;
+    private final static int NUM_11 = 11;
+    private final static int NUM_12 = 12;
+    private final static int NUM_13 = 13;
+    private final static int NUM_14 = 14;
+    private final static int NUM_15 = 15;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
