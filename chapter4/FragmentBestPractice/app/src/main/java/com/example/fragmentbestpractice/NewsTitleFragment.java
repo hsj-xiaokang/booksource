@@ -153,7 +153,7 @@ public class NewsTitleFragment extends Fragment {
                         newsList.clear();
                         //放置pagerSize的数量个，实际中就是http请求回来的数据,请求时候根据currentPage,pagerSize等
                         {
-                            //静态代码块
+                            //代码块先于构造函数
                             newsList.add(new News(){{
                                 setTitle(getActivity().getString(R.string.app_title)+NUM_0);
                                 setContent(getRandomLengthContent(getActivity().getString(R.string.app_content)+NUM_0));}});
@@ -225,7 +225,7 @@ public class NewsTitleFragment extends Fragment {
                     @Override
                     public void run() {
                         //实际中就是http请求回来的数据,请求时候根据currentPage,pagerSize等追加数据
-                        {//静态代码块
+                        {//代码块先于构造函数
                             newsList.add(new News(){{
                                 setTitle(getActivity().getString(R.string.app_title)+NUM_0);
                                 setContent(getRandomLengthContent(getActivity().getString(R.string.app_content)+NUM_0));}});
