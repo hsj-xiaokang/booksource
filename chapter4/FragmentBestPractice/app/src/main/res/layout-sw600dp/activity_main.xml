@@ -3,7 +3,10 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    <!--第一种后缀：sw<N>dp,如layout-sw600dp, values-sw600dp
+    这里的sw代表smallwidth的意思，当你所有屏幕的最小宽度都大于600dp时,
+    屏幕就会自动到带sw600dp后缀的资源文件里去寻找相关资源文件，
+    这里的最小宽度是指屏幕宽高的较小值，每个屏幕都是固定的，不会随着屏幕横向纵向改变而改变。-->
     <fragment
         android:id="@+id/news_title_fragment"
         android:name="com.example.fragmentbestpractice.NewsTitleFragment"
