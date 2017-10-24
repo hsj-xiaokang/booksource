@@ -15,35 +15,54 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ * 注意该方法只能够存贮到默认的data/data/<package-name>/files/目录下面
+ * 注意文件名不能含有路径
+ */
 public class MainActivity extends AppCompatActivity {
 
     private EditText edit;
+    private final static String FILENMAE = "data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         edit = (EditText) findViewById(R.id.edit);
+
         String inputText = load();
+
         if (!TextUtils.isEmpty(inputText)) {
             edit.setText(inputText);
+            //设置光标到文字后面继续输入
             edit.setSelection(inputText.length());
             Toast.makeText(this, "Restoring succeeded", Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * 销毁时候保存
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         String inputText = edit.getText().toString();
+        if(inputText == null || "".equals(inputText)){
+            return;
+        }
         save(inputText);
     }
 
+    /**
+     * 保存
+     * @param inputText
+     */
     public void save(String inputText) {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
-            out = openFileOutput("data", Context.MODE_PRIVATE);
+            out = openFileOutput(FILENMAE, Context.MODE_PRIVATE);
             writer = new BufferedWriter(new OutputStreamWriter(out));
             writer.write(inputText);
         } catch (IOException e) {
@@ -59,12 +78,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 读取
+     * @return
+     */
     public String load() {
         FileInputStream in = null;
         BufferedReader reader = null;
         StringBuilder content = new StringBuilder();
         try {
-            in = openFileInput("data");
+            in = openFileInput(FILENMAE);
             reader = new BufferedReader(new InputStreamReader(in));
             String line = "";
             while ((line = reader.readLine()) != null) {
