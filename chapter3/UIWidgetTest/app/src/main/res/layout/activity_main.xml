@@ -37,7 +37,7 @@
         android:src="@drawable/img_1"
         android:layout_gravity="center"
         />
-    <!--通过progressDrawable-->
+    <!--style="?android:attr/progressBarStyleHorizontal"水平方向的ProgressBar-->
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
@@ -78,6 +78,7 @@
         android:id="@+id/ui_attrs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="查看自己定义的UI_Attrs"/>
+        android:text="查看自己定义的UI_Attrs"
+        />
 
 </LinearLayout>

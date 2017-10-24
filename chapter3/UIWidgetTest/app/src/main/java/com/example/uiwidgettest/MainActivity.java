@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 字体的大小使用sp单位
+ * 参考http://blog.csdn.net/brokge/article/details/9713041/
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";

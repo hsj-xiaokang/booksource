@@ -12,6 +12,7 @@
             <solid android:color="@color/gyGrey" />   <!-- 描边 -->
         </shape>
     </item>
+
     <item android:id="@android:id/progress">
         <clip>
             <shape>
