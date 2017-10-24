@@ -3,6 +3,7 @@ package com.example.uiwidgettest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.uiwidgettest.selfCustom_UI_Attrs.self_custom_ui_attrs_activity;
 import com.example.uiwidgettest.utils.ObjectUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView imageView;
 
     private ProgressBar progressBar;
+
+    private Button b_ui_attrs;
     /**
      * 1.Handler用作定时器  2.更新主UI线程
      * 当创建一个Handler的时候，该Handler就绑定了当前创建Hanlder的线程ui线程
@@ -60,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageView.setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setOnClickListener(this);
+        b_ui_attrs = (Button) findViewById(R.id.ui_attrs);
+        b_ui_attrs.setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.progress_bar:
                 hProgress();
                 Toast.makeText(this,"you click progress!",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ui_attrs:
+                MainActivity.this.startActivity(new Intent(){
+                    {setClass(MainActivity.this,self_custom_ui_attrs_activity.class);}
+                });
                 break;
             default:
                 break;

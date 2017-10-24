@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:lee="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_0"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0dp"
+        lee:right_button_drawable="@mipmap/titlebar_add_icon"
+        lee:title_background_color="@color/green"
+        lee:title_text="标题1" />
+
+ <!--   <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_1"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        lee:right_button_visible="false"
+        lee:title_background_color="@color/green"
+        lee:title_text="标题2" />
+
+    <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_2"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        lee:left_button_text="左边"
+        lee:right_button_text="右边"
+        lee:title_background_color="@color/red"
+        lee:title_text="标题3" />
+
+    <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_3"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        lee:left_button_text="左边"
+        lee:right_button_drawable="@mipmap/titlebar_add_icon"
+        lee:title_background_color="@color/red"
+        lee:title_text="标题4" />
+
+    <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_4"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        lee:left_button_text="左边"
+        lee:left_button_text_color="@color/red"
+        lee:right_button_drawable="@mipmap/titlebar_add_icon"
+        lee:title_background_color="@color/blue"
+        lee:title_text="标题5" />
+
+    <com.example.uiwidgettest.selfCustom_UI_Attrs.CustomTitleBar
+        android:id="@+id/ui_attrs_5"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        lee:left_button_text="左边"
+        lee:left_button_text_color="@color/red"
+        lee:right_button_drawable="@mipmap/titlebar_add_icon"
+        lee:title_background_color="@color/blue"
+        lee:title_text="标题6"
+        lee:title_text_color="@color/black" />-->
+
+</LinearLayout>
