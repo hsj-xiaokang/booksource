@@ -13,5 +13,9 @@
 												                    listView方式：     * https://github.com/chrisbanes/Android-PullToRefresh   * listView 实现的下拉刷新，上拉加载更多；
 																	
 																	
-****************booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs ，其中实现了自定UI attrs功能的的仿支付宝和QQ右上角的三个点点的pupmenu效果。************************																	
+****************booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs ，其中实现了自定UI attrs功能的的仿支付宝和QQ右上角的三个点点的pupmenu效果。
+参考:http://blog.csdn.net/brokge/article/details/9713041/
+http://www.cnblogs.com/xch-yang/p/6017685.html
+http://www.cnblogs.com/whoislcj/p/5714760.html
+************************																	
 																																					

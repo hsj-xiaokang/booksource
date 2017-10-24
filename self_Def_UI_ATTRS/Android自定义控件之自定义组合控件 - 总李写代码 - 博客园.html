@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://www.cnblogs.com/whoislcj/p/5714760.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Android自定义控件之自定义组合控件 - 总李写代码 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/bundle-LessIsMore.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/bundle-LessIsMore-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/whoislcj/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/whoislcj/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/whoislcj/wlwmanifest.xml">
+<script async="" src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/encoder.js.下载"></script><script src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/jquery.js.下载" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'whoislcj', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<style type="text/css" abt="234"></style><script>//console.log('a')
+</script><script>doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                'pps_pps': {
+                    'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
+                    'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
+                },
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if (/http:\/\/v.youku.com\/v_show\/.*/.test(window.location.href)){
+                    var tag = document.getElementById("playerBox").getAttribute("player")
+                    if (tag == "adt"){
+                        console.log("adt adv")
+                        return;
+                    }
+                }
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+// 20140730
+(function cnbeta() {
+    if (document.URL.indexOf('cnbeta.com') >= 0) {
+        var elms = document.body.querySelectorAll("p>embed");
+        Array.prototype.forEach.call(elms, function(elm) {
+            elm.style.marginLeft = "0px";
+        });
+    }
+})();
+//baidu
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+// 20140922
+(function kill_360() {
+    if (document.URL.indexOf('so.com') >= 0) {
+        document.getElementById("e_idea_pp").style.display = none;
+    }
+})();
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body>
+<a name="top"></a>
+
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+		
+<!--done-->
+<div class="title"><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/whoislcj/">总李写代码</a></div>
+<div class="subtitle">干我们这行，啥时候懈怠，就意味着长进的停止，长进的停止就意味着被淘汰，只能往前冲，直到凤凰涅槃的一天！</div>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li id="nav_myhome"></li>
+<li id="nav_newpost"><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li id="nav_contact"></li>
+<li id="nav_rss">
+<!----></li>
+<li id="nav_admin"><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+随笔-126&nbsp;
+文章-0&nbsp;
+评论-257&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/whoislcj/p/5714760.html">Android自定义控件之自定义组合控件</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><h3>前言：</h3>
+<p>&nbsp; &nbsp; &nbsp;前两篇介绍了自定义控件的基础原理<a id="homepage1_HomePageDays_DaysList_ctl01_DayList_TitleUrl_0" class="postTitle2" href="http://www.cnblogs.com/whoislcj/p/5708778.html">Android自定义控件之基本原理（一）</a>、自定义属性<a id="homepage1_HomePageDays_DaysList_ctl00_DayList_TitleUrl_0" class="postTitle2" href="http://www.cnblogs.com/whoislcj/p/5711001.html">Android自定义控件之自定义属性（二）</a>。今天重点介绍一下如何通过自定义组合控件来提高布局的复用，降低开发成本，以及维护成本。</p>
+<p>&nbsp;自定义控件相关文章地址：</p>
+<ul>
+<li><a id="CategoryEntryList1_EntryStoryList_ctl00_Entries_TitleUrl_3" class="entrylistItemTitle" href="http://www.cnblogs.com/whoislcj/p/5708778.html">Android自定义控件之基本原理</a></li>
+<li><a id="CategoryEntryList1_EntryStoryList_ctl00_Entries_TitleUrl_2" class="entrylistItemTitle" href="http://www.cnblogs.com/whoislcj/p/5711001.html">Android自定义控件之自定义属性</a></li>
+<li><a id="CategoryEntryList1_EntryStoryList_ctl00_Entries_TitleUrl_1" class="entrylistItemTitle" href="http://www.cnblogs.com/whoislcj/p/5714760.html">Android自定义控件之自定义组合控件</a></li>
+<li><a id="CategoryEntryList1_EntryStoryList_ctl00_Entries_TitleUrl_0" class="entrylistItemTitle" href="http://www.cnblogs.com/whoislcj/p/5720202.html">Android自定义控件之自定义ViewGroup实现标签云</a></li>
+</ul>
+<h3>使用自定义组合控件的好处？</h3>
+<p>&nbsp; &nbsp; 我们在项目开发中经常会遇见很多相似或者相同的布局，比如APP的标题栏，我们从三种方式实现标题栏来对比自定义组件带来的好处，毕竟好的东西还是以提高开发效率，降低开发成本为导向的。</p>
+<h4>1.）第一种方式：直接在每个xml布局中写相同的标题栏布局代码</h4>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="utf-8"</span><span style="color: #0000ff;">?&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">LinearLayout </span><span style="color: #ff0000;">xmlns:android</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res/android"</span><span style="color: #ff0000;">
+    xmlns:lee</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res-auto"</span><span style="color: #ff0000;">
+    android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:layout_height</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:orientation</span><span style="color: #0000ff;">="vertical"</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">RelativeLayout
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:background</span><span style="color: #0000ff;">="@color/green"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #0000ff;">&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_left"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_alignParentLeft</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_marginLeft</span><span style="color: #0000ff;">="5dp"</span><span style="color: #ff0000;">
+            android:background</span><span style="color: #0000ff;">="@mipmap/titlebar_back_icon"</span><span style="color: #ff0000;">
+            android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">TextView
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_title"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_centerInParent</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:text</span><span style="color: #0000ff;">="登录"</span><span style="color: #ff0000;">
+            android:singleLine</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="17sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_right"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_alignParentRight</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_marginRight</span><span style="color: #0000ff;">="7dp"</span><span style="color: #ff0000;">
+            android:text</span><span style="color: #0000ff;">="提交"</span><span style="color: #ff0000;">
+            android:textColor</span><span style="color: #0000ff;">="@android:color/white"</span><span style="color: #ff0000;">
+            android:background</span><span style="color: #0000ff;">="@null"</span><span style="color: #ff0000;">
+            android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">RelativeLayout</span><span style="color: #0000ff;">&gt;</span>
+
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">LinearLayout</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp; &nbsp; 这种方式没有任何布局复用的概念，同时也让当前的布局变得臃肿难以维护，开发效率低下，而且这个还需要要求每个开发人员必须细心否则有可能会做出参差不齐的标题栏，所以这种方式是最不推荐使用的。</p>
+<h4>2.）第二种方式：使用include标签</h4>
+<p>&nbsp;首先定义标题栏布局</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">RelativeLayout
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:background</span><span style="color: #0000ff;">="@color/green"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #0000ff;">&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_left"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_alignParentLeft</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_marginLeft</span><span style="color: #0000ff;">="5dp"</span><span style="color: #ff0000;">
+            android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">TextView
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_title"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_centerInParent</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:singleLine</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="17sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+            </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_right"</span><span style="color: #ff0000;">
+            android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+            android:layout_alignParentRight</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+            android:layout_marginRight</span><span style="color: #0000ff;">="7dp"</span><span style="color: #ff0000;">
+            android:background</span><span style="color: #0000ff;">="@null"</span><span style="color: #ff0000;">
+            android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+            android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">RelativeLayout</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>然后在需要的地方通过include标签实现引用</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">LinearLayout </span><span style="color: #ff0000;">xmlns:android</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res/android"</span><span style="color: #ff0000;">
+    xmlns:lee</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res-auto"</span><span style="color: #ff0000;">
+    android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:layout_height</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:orientation</span><span style="color: #0000ff;">="vertical"</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">include </span><span style="color: #ff0000;">layout</span><span style="color: #0000ff;">="@layout/view_title_bar"</span> <span style="color: #0000ff;">/&gt;</span>
+
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">LinearLayout</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>通过上面的布局代码，我们可以使用上面这种方式确实实现了布局的复用，而且也避免了开发人员开发出参差不齐标题栏的问题，但是同时也引入了新的问题，比如更加降低了开发效率，加大了开发成本，问题就在我们该如何为每个布局文件定义标题栏？只有通过代码的方式来设置标题问题，左右按钮等其他的属性，导致布局属性和Activity代码耦合性比较高，所以这种方式也不是推荐的方式。</p>
+<h4>3.）第三种方式：通过自定义组合控件</h4>
+<p>&nbsp; &nbsp; 这里先不具体介绍如何实现一个自定义组合控件，这里先介绍一下自定义组合控件带来的好处。</p>
+<ul>
+<li><strong>提高布局文件开发效率</strong></li>
+<li><strong>降低布局文件维护成本</strong></li>
+<li><strong>降低布局文件和Activity代码耦合性</strong></li>
+<li><strong>容易扩展</strong></li>
+<li><strong>简单易用</strong></li>
+</ul>
+<h3>&nbsp;如何实现一个自定义组合控件</h3>
+<h4>1.）先定义一个布局文件</h4>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">merge </span><span style="color: #ff0000;">xmlns:android</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res/android"</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+        </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_left"</span><span style="color: #ff0000;">
+        android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_alignParentLeft</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:layout_marginLeft</span><span style="color: #0000ff;">="5dp"</span><span style="color: #ff0000;">
+        android:background</span><span style="color: #0000ff;">="@null"</span><span style="color: #ff0000;">
+        android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">TextView
+        </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_title"</span><span style="color: #ff0000;">
+        android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_centerInParent</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:singleLine</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:textSize</span><span style="color: #0000ff;">="17sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">Button
+        </span><span style="color: #ff0000;">android:id</span><span style="color: #0000ff;">="@+id/title_bar_right"</span><span style="color: #ff0000;">
+        android:layout_width</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="wrap_content"</span><span style="color: #ff0000;">
+        android:layout_alignParentRight</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:layout_centerVertical</span><span style="color: #0000ff;">="true"</span><span style="color: #ff0000;">
+        android:layout_marginRight</span><span style="color: #0000ff;">="7dp"</span><span style="color: #ff0000;">
+        android:background</span><span style="color: #0000ff;">="@null"</span><span style="color: #ff0000;">
+        android:minHeight</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:minWidth</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:textSize</span><span style="color: #0000ff;">="14sp"</span> <span style="color: #0000ff;">/&gt;</span>
+
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">merge</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><strong><span style="background-color: #ffffff; color: #ff0000;">注意：</span></strong><span style="background-color: #ffffff; color: #000000;">这里为何要使用merge标签，自定义组合控件时会继承RelativeLayout、LinearLayout等控件，这样导致布局的层级无形中增加了一层，如下是对比：</span></p>
+<p><span style="background-color: #ffffff; color: #000000;">未使用merge标签</span></p>
+<p><span style="background-color: #ffffff; color: #000000;"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/950883-20160728162347450-1398936692.png" alt=""></span></p>
+<p>&nbsp;</p>
+<p>使用merge标签</p>
+<p><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/950883-20160728162457622-1332423681.png" alt=""></p>
+<h4>2.）定义自定义属性</h4>
+<p>比如标题文字、标题栏左边按钮图标等。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre> <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">declare-styleable </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="CustomTitleBar"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="title_background_color"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="reference|integer"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="left_button_visible"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="boolean"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="right_button_visible"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="boolean"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="title_text"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="string"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="title_text_color"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="color"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="title_text_drawable"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="reference|integer"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="right_button_text"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="string"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="right_button_text_color"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="color"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="right_button_drawable"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="reference|integer"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="left_button_text"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="string"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="left_button_text_color"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="color"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">attr </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="left_button_drawable"</span><span style="color: #ff0000;"> format</span><span style="color: #0000ff;">="reference|integer"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">declare-styleable</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h4>3.）自定义一个View根据需求继承不同的ViewGroup子类，比如：RelativeLayout、LinearLayout等，我们这里继承RelativeLayout。</h4>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> CustomTitleBar <span style="color: #0000ff;">extends</span><span style="color: #000000;"> RelativeLayout {
+    </span><span style="color: #0000ff;">private</span><span style="color: #000000;"> Button titleBarLeftBtn;
+    </span><span style="color: #0000ff;">private</span><span style="color: #000000;"> Button titleBarRightBtn;
+    </span><span style="color: #0000ff;">private</span><span style="color: #000000;"> TextView titleBarTitle;
+
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> CustomTitleBar(Context context, AttributeSet attrs) {
+        </span><span style="color: #0000ff;">super</span><span style="color: #000000;">(context, attrs);
+        LayoutInflater.from(context).inflate(R.layout.custom_title_bar, </span><span style="color: #0000ff;">this</span>, <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+        titleBarLeftBtn </span>=<span style="color: #000000;"> (Button) findViewById(R.id.title_bar_left);
+        titleBarRightBtn </span>=<span style="color: #000000;"> (Button) findViewById(R.id.title_bar_right);
+        titleBarTitle </span>=<span style="color: #000000;"> (TextView) findViewById(R.id.title_bar_title);
+
+        TypedArray attributes </span>=<span style="color: #000000;"> context.obtainStyledAttributes(attrs, R.styleable.CustomTitleBar);
+        </span><span style="color: #0000ff;">if</span> (attributes != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">处理titleBar背景色</span>
+            <span style="color: #0000ff;">int</span> titleBarBackGround =<span style="color: #000000;"> attributes.getResourceId(R.styleable.CustomTitleBar_title_background_color, Color.GREEN);
+            setBackgroundResource(titleBarBackGround);
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">先处理左边按钮
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">获取是否要显示左边按钮</span>
+            <span style="color: #0000ff;">boolean</span> leftButtonVisible = attributes.getBoolean(R.styleable.CustomTitleBar_left_button_visible, <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (leftButtonVisible) {
+                titleBarLeftBtn.setVisibility(View.VISIBLE);
+            } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+                titleBarLeftBtn.setVisibility(View.INVISIBLE);
+            }
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">设置左边按钮的文字</span>
+            String leftButtonText =<span style="color: #000000;"> attributes.getString(R.styleable.CustomTitleBar_left_button_text);
+            </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">TextUtils.isEmpty(leftButtonText)) {
+                titleBarLeftBtn.setText(leftButtonText);
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">设置左边按钮文字颜色</span>
+                <span style="color: #0000ff;">int</span> leftButtonTextColor =<span style="color: #000000;"> attributes.getColor(R.styleable.CustomTitleBar_left_button_text_color, Color.WHITE);
+                titleBarLeftBtn.setTextColor(leftButtonTextColor);
+            } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">设置左边图片icon 这里是二选一 要么只能是文字 要么只能是图片</span>
+                <span style="color: #0000ff;">int</span> leftButtonDrawable =<span style="color: #000000;"> attributes.getResourceId(R.styleable.CustomTitleBar_left_button_drawable, R.mipmap.titlebar_back_icon);
+                </span><span style="color: #0000ff;">if</span> (leftButtonDrawable != -1<span style="color: #000000;">) {
+                    titleBarLeftBtn.setBackgroundResource(leftButtonDrawable);
+                }
+            }
+
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">处理标题
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">先获取标题是否要显示图片icon</span>
+            <span style="color: #0000ff;">int</span> titleTextDrawable = attributes.getResourceId(R.styleable.CustomTitleBar_title_text_drawable, -1<span style="color: #000000;">);
+            </span><span style="color: #0000ff;">if</span> (titleTextDrawable != -1<span style="color: #000000;">) {
+                titleBarTitle.setBackgroundResource(titleTextDrawable);
+            } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">如果不是图片标题 则获取文字标题</span>
+                String titleText =<span style="color: #000000;"> attributes.getString(R.styleable.CustomTitleBar_title_text);
+                </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">TextUtils.isEmpty(titleText)) {
+                    titleBarTitle.setText(titleText);
+                }
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">获取标题显示颜色</span>
+                <span style="color: #0000ff;">int</span> titleTextColor =<span style="color: #000000;"> attributes.getColor(R.styleable.CustomTitleBar_title_text_color, Color.WHITE);
+                titleBarTitle.setTextColor(titleTextColor);
+            }
+
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">先处理右边按钮
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">获取是否要显示右边按钮</span>
+            <span style="color: #0000ff;">boolean</span> rightButtonVisible = attributes.getBoolean(R.styleable.CustomTitleBar_right_button_visible, <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+            </span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (rightButtonVisible) {
+                titleBarRightBtn.setVisibility(View.VISIBLE);
+            } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+                titleBarRightBtn.setVisibility(View.INVISIBLE);
+            }
+            </span><span style="color: #008000;">//</span><span style="color: #008000;">设置右边按钮的文字</span>
+            String rightButtonText =<span style="color: #000000;"> attributes.getString(R.styleable.CustomTitleBar_right_button_text);
+            </span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">TextUtils.isEmpty(rightButtonText)) {
+                titleBarRightBtn.setText(rightButtonText);
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">设置右边按钮文字颜色</span>
+                <span style="color: #0000ff;">int</span> rightButtonTextColor =<span style="color: #000000;"> attributes.getColor(R.styleable.CustomTitleBar_right_button_text_color, Color.WHITE);
+                titleBarRightBtn.setTextColor(rightButtonTextColor);
+            } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+                </span><span style="color: #008000;">//</span><span style="color: #008000;">设置右边图片icon 这里是二选一 要么只能是文字 要么只能是图片</span>
+                <span style="color: #0000ff;">int</span> rightButtonDrawable = attributes.getResourceId(R.styleable.CustomTitleBar_right_button_drawable, -1<span style="color: #000000;">);
+                </span><span style="color: #0000ff;">if</span> (rightButtonDrawable != -1<span style="color: #000000;">) {
+                    titleBarRightBtn.setBackgroundResource(rightButtonDrawable);
+                }
+            }
+            attributes.recycle();
+        }
+    }
+
+    </span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setTitleClickListener(OnClickListener onClickListener) {
+        </span><span style="color: #0000ff;">if</span> (onClickListener != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+            titleBarLeftBtn.setOnClickListener(onClickListener);
+            titleBarRightBtn.setOnClickListener(onClickListener);
+        }
+    }
+
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> Button getTitleBarLeftBtn() {
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> titleBarLeftBtn;
+    }
+
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> Button getTitleBarRightBtn() {
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> titleBarRightBtn;
+    }
+
+    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> TextView getTitleBarTitle() {
+        </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> titleBarTitle;
+    }
+}</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h4>4.）在不同的XML布局中引用</h4>
+<p>关于如何使用自定义属性这里就不再说明了，为了更加直观的查看效果，我这里在一个布局文件中实现不同要求的标题栏</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="utf-8"</span><span style="color: #0000ff;">?&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">LinearLayout </span><span style="color: #ff0000;">xmlns:android</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res/android"</span><span style="color: #ff0000;">
+    xmlns:lee</span><span style="color: #0000ff;">="http://schemas.android.com/apk/res-auto"</span><span style="color: #ff0000;">
+    android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:layout_height</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+    android:orientation</span><span style="color: #0000ff;">="vertical"</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:right_button_drawable</span><span style="color: #0000ff;">="@mipmap/titlebar_add_icon"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/green"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题1"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:right_button_visible</span><span style="color: #0000ff;">="false"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/green"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题2"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:left_button_text</span><span style="color: #0000ff;">="左边"</span><span style="color: #ff0000;">
+        lee:right_button_text</span><span style="color: #0000ff;">="右边"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/red"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题3"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:left_button_text</span><span style="color: #0000ff;">="左边"</span><span style="color: #ff0000;">
+        lee:right_button_drawable</span><span style="color: #0000ff;">="@mipmap/titlebar_add_icon"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/red"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题4"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:left_button_text</span><span style="color: #0000ff;">="左边"</span><span style="color: #ff0000;">
+        lee:left_button_text_color</span><span style="color: #0000ff;">="@color/red"</span><span style="color: #ff0000;">
+        lee:right_button_drawable</span><span style="color: #0000ff;">="@mipmap/titlebar_add_icon"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/blue"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题5"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">com.whoislcj.views.CustomTitleBar
+        </span><span style="color: #ff0000;">android:layout_width</span><span style="color: #0000ff;">="match_parent"</span><span style="color: #ff0000;">
+        android:layout_height</span><span style="color: #0000ff;">="45dp"</span><span style="color: #ff0000;">
+        android:layout_marginTop</span><span style="color: #0000ff;">="10dp"</span><span style="color: #ff0000;">
+        lee:left_button_text</span><span style="color: #0000ff;">="左边"</span><span style="color: #ff0000;">
+        lee:left_button_text_color</span><span style="color: #0000ff;">="@color/red"</span><span style="color: #ff0000;">
+        lee:right_button_drawable</span><span style="color: #0000ff;">="@mipmap/titlebar_add_icon"</span><span style="color: #ff0000;">
+        lee:title_background_color</span><span style="color: #0000ff;">="@color/blue"</span><span style="color: #ff0000;">
+        lee:title_text</span><span style="color: #0000ff;">="标题6"</span><span style="color: #ff0000;">
+        lee:title_text_color</span><span style="color: #0000ff;">="@color/black"</span> <span style="color: #0000ff;">/&gt;</span>
+
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">LinearLayout</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>显示效果</p>
+<p><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/950883-20160728163148606-198824089.jpg" alt="" width="335" height="595"></p>
+<h3>总结：</h3>
+<p>&nbsp; &nbsp; 通过本篇文章我们得知，通过自定义组合控件确实能够提高开发效率，降低维护成本，但是也需要UI设计风格保持高度一致，不然的话只能呵呵哒了！所以想要做好一个app需要一个有共识的团队才行。本篇介绍到此为止，下一篇要更新什么我还没有想好！有可能是自定义控件的事件回调，也有可能自定义ViewGroup实现流式布局。</p>
+<p>&nbsp;</p></div><div id="MySignature" style="display: block;">干我们这行，啥时候懈怠，就意味着长进的停止，长进的停止就意味着被淘汰，只能往前冲，直到凤凰涅槃的一天！</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/whoislcj/category/858713.html" target="_blank">Android自定义控件</a></div>
+<div id="EntryTag">标签: <a href="http://www.cnblogs.com/whoislcj/tag/Android%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E5%90%88%E6%8E%A7%E4%BB%B6/">Android自定义组合控件</a>, <a href="http://www.cnblogs.com/whoislcj/tag/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E5%90%88%E6%8E%A7%E4%BB%B6/">自定义组合控件</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5714760,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;66499144-2213-e611-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/whoislcj/" target="_blank"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/20160512221153.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/whoislcj/">总李写代码</a><br>
+            <a href="http://home.cnblogs.com/u/whoislcj/followees">关注 - 0</a><br>
+            <a href="http://home.cnblogs.com/u/whoislcj/followers">粉丝 - 285</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;66499144-2213-e611-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5714760,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">6</span>
+    </div>
+    <div class="buryit" onclick="votePost(5714760,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/whoislcj/p/5711001.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/whoislcj/p/5711001.html" title="发布于2016-07-28 08:38">Android自定义控件之自定义属性</a><br><a href="http://www.cnblogs.com/whoislcj/p/5473030.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/whoislcj/p/5473030.html" title="发布于2016-07-30 17:19">Android数据加密之Aes加密</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-07-29 08:37</span> <a href="http://www.cnblogs.com/whoislcj/">总李写代码</a> 阅读(<span id="post_view_count">24348</span>) 评论(<span id="post_comment_count">4</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5714760" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/whoislcj/p/5714760.html#" onclick="AddToWz(5714760);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=283786,cb_entryId=5714760,cb_blogApp=currentBlogApp,cb_blogUserGuid='66499144-2213-e611-9fc1-ac853d9f53cc',cb_entryCreatedDate='2016/7/29 8:37:00';loadViewCount(cb_entryId);</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<!--done-->
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/whoislcj/p/5714760.html#3478785" class="layer">#1楼</a><a name="3478785" id="comment_anchor_3478785"></a>  <span class="comment_date">2016-07-29 09:01</span> <a id="a_comment_author_3478785" href="http://www.cnblogs.com/wqjg/" target="_blank">博客园一把手</a> <a href="http://msg.cnblogs.com/send/%E5%8D%9A%E5%AE%A2%E5%9B%AD%E4%B8%80%E6%8A%8A%E6%89%8B" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3478785" class="blog_comment_body">写得好，为了好文章，顶一个</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3478785,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3478785,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/whoislcj/p/5714760.html#3478796" class="layer">#2楼</a><a name="3478796" id="comment_anchor_3478796"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2016-07-29 09:12</span> <a id="a_comment_author_3478796" href="http://www.cnblogs.com/whoislcj/" target="_blank">总李写代码</a> <a href="http://msg.cnblogs.com/send/%E6%80%BB%E6%9D%8E%E5%86%99%E4%BB%A3%E7%A0%81" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3478796" class="blog_comment_body"><a href="http://www.cnblogs.com/whoislcj/p/5714760.html#3478785" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3478785);">@</a>
+博客园一把手<br>谢谢支持</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3478796,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3478796,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3478796_avatar" style="display:none;">http://pic.cnblogs.com/face/950883/20160512221153.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/whoislcj/p/5714760.html#3521437" class="layer">#3楼</a><a name="3521437" id="comment_anchor_3521437"></a>  <span class="comment_date">2016-09-28 13:54</span> <a id="a_comment_author_3521437" href="http://www.cnblogs.com/glimpse/" target="_blank">野狗道人</a> <a href="http://msg.cnblogs.com/send/%E9%87%8E%E7%8B%97%E9%81%93%E4%BA%BA" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3521437" class="blog_comment_body">你的返回图片和添加图片大小本来就这么大吗？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3521437,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3521437,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3521437_avatar" style="display:none;">http://pic.cnblogs.com/face/901062/20160301204706.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/whoislcj/p/5714760.html#3687213" class="layer">#4楼</a><a name="3687213" id="comment_anchor_3687213"></a><span id="comment-maxId" style="display:none;">3687213</span><span id="comment-maxDate" style="display:none;">2017/5/8 23:36:15</span>  <span class="comment_date">2017-05-08 23:36</span> <a id="a_comment_author_3687213" href="http://home.cnblogs.com/u/1053507/" target="_blank">boatImpish</a> <a href="http://msg.cnblogs.com/send/boatImpish" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3687213" class="blog_comment_body">我写了一个Demo但是，标题栏右边的按钮设置图片时，显示的是图片的路径，而不是图片，请问该如何解决？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3687213,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3687213,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/whoislcj/p/5714760.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/whoislcj/p/5714760.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/580839/" target="_blank">ofo正式登陆澳洲悉尼 半小时5元无需押金</a><br> ·  <a href="http://news.cnblogs.com/n/580838/" target="_blank">乐视CEO梁军离职揭秘：早已和孙宏斌破裂</a><br> ·  <a href="http://news.cnblogs.com/n/580837/" target="_blank">Facebook正测试自家直播视频制作软件Live Video Producer</a><br> ·  <a href="http://news.cnblogs.com/n/580836/" target="_blank">网易市场总经理：打造社交零售平台“推手”，让好的商品找到对的人</a><br> ·  <a href="http://news.cnblogs.com/n/580835/" target="_blank">羊毛党大揭秘：一亿手机黑卡在手，半年撸垮上市公司</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/579480/" target="_blank">实用VPC虚拟私有云设计原则</a><br> ·  <a href="http://kb.cnblogs.com/page/576251/" target="_blank">如何阅读计算机科学类的书</a><br> ·  <a href="http://kb.cnblogs.com/page/578103/" target="_blank">Google 及其云智慧</a><br> ·  <a href="http://kb.cnblogs.com/page/575829/" target="_blank">做到这一点，你也可以成为优秀的程序员</a><br> ·  <a href="http://kb.cnblogs.com/page/566880/" target="_blank">写给立志做码农的大学生</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div>
+     <a href="https://shop536523466.taobao.com/"><img src="./Android自定义控件之自定义组合控件 - 总李写代码 - 博客园_files/950883-20170710201619837-436661045.jpg"></a>
+</div><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/whoislcj/">总李写代码</a><br>园龄：<a href="http://home.cnblogs.com/u/whoislcj/" title="入园时间：2016-05-06">1年5个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/whoislcj/followers/">285</a><br>关注：<a href="http://home.cnblogs.com/u/whoislcj/followees/">0</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;66499144-2213-e611-9fc1-ac853d9f53cc&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block"></div><div id="sidebar_recentposts" class="sidebar-block">
+<div class="catListEssay">
+<h3 class="catListTitle">最新随笔</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/whoislcj/p/6927036.html">1. Android学习探索之App多渠道打包及动态添加修改资源属性</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6646925.html">2. Android学习探索之运用MVP设计模式实现项目解耦</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6626540.html">3. Android注解使用之Dagger2实现项目依赖关系解耦</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6546831.html">4. Android学习探索之本地原生渲染 LaTeX数据公式</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6535251.html">5. Java数据结构之Set学习总结</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6516789.html">6. Java数据结构之Map学习总结</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6508851.html">7. Java数据结构之LinkedList、ArrayList的效率分析</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6490120.html">8. Android业务组件化之Gradle和Sonatype Nexus搭建私有maven仓库</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6250284.html">9. Android UI体验之全屏沉浸式透明状态栏效果</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6168641.html">10. Android注解使用之通过annotationProcessor注解生成代码实现自己的ButterKnife框架</a></li>
+</ul>
+</div>
+</div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">随笔分类<span style="font-size:11px;font-weight:normal">(126)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/whoislcj/category/932984.html">Android UI体验(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/whoislcj/category/861994.html">Android动画效果(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/whoislcj/category/914677.html">Android混合开发(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/whoislcj/category/830987.html">Android加密解密(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/whoislcj/category/909252.html">Android权限管理(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/whoislcj/category/845938.html">Android使用注解(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/whoislcj/category/830961.html">Android数据存储(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/whoislcj/category/830962.html">Android四大组件(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/whoislcj/category/835852.html">Android图片缓存(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/whoislcj/category/831760.html">Android网络请求(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/whoislcj/category/843256.html">Android线程管理(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/whoislcj/category/841874.html">Android消息传递(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/whoislcj/category/849714.html">Android性能优化(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/whoislcj/category/917250.html">Android学习探索(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/whoislcj/category/875546.html">Android业务组件化(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/whoislcj/category/830977.html">Android音频视频(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/whoislcj/category/825735.html">Android知识小结(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="http://www.cnblogs.com/whoislcj/category/858713.html">Android自定义控件(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="http://www.cnblogs.com/whoislcj/category/1012857.html">Hybrid App开发(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="http://www.cnblogs.com/whoislcj/category/949590.html">IOS缓存管理(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="http://www.cnblogs.com/whoislcj/category/937306.html">IOS控件布局(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="http://www.cnblogs.com/whoislcj/category/947319.html">IOS任务管理(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="http://www.cnblogs.com/whoislcj/category/830988.html">IOS数据存储(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="http://www.cnblogs.com/whoislcj/category/943454.html">IOS网络请求(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="http://www.cnblogs.com/whoislcj/category/825736.html">IOS学习总结(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="http://www.cnblogs.com/whoislcj/category/826758.html">Java日常总结(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="http://www.cnblogs.com/whoislcj/category/831762.html">Java设计模式(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="http://www.cnblogs.com/whoislcj/category/959837.html">Java数据结构(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="http://www.cnblogs.com/whoislcj/category/1021134.html">React Native开发</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="http://www.cnblogs.com/whoislcj/category/829714.html">工作随笔(3)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	246272
+	</li>
+	<li class="liRank">
+		排名 -	781
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/whoislcj/p/5853393.html#3814071">1. Re:Android业务组件化之现状分析与探讨</a></li>
+        <li class="recent_comment_body">写的不错，请问一下作图用的是什么工具？</li>
+        <li class="recent_comment_author">--Kaming</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/whoislcj/p/6064710.html#3799286">2. Re:Android权限管理之Android 6.0运行时权限及解决办法</a></li>
+        <li class="recent_comment_body">好像都是基于AppCompatActivity 进行重写onRequestPermissionsResult来实现动态授权的。那么问题来了，我可不可以创建一个类，继承自AppCompatActivit......</li>
+        <li class="recent_comment_author">--异次元代码</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/whoislcj/p/5511522.html#3790862">3. Re:Android数据存储之SQLCipher数据库加密</a></li>
+        <li class="recent_comment_body">这个sqlcipher能在.net下使用吗？</li>
+        <li class="recent_comment_author">--Prolovecui</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/whoislcj/p/5558168.html">1. Android图片缓存之初识Glide(47022)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5526431.html">2. Android okHttp网络请求之Get/Post请求(37952)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5651396.html">3. Android数据存储之GreenDao 3.0 详解(36160)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5595714.html">4. Android消息传递之EventBus 3.0使用详解(36148)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5529827.html">5. Android okHttp网络请求之文件上传下载(30480)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5980240.html">6. Android混合开发之WebView与Javascript交互(24990)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5714760.html">7. Android自定义控件之自定义组合控件(24347)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5708778.html">8. Android自定义控件之基本原理(20880)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5565012.html">9. Android图片缓存之Glide进阶(20792)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5733740.html">10. Android动画效果之Frame Animation（逐帧动画）(20465)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5825333.html">11. Android业务组件化之URL Scheme使用(19193)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5885006.html">12. Android数据加密之MD5加密(17965)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5887859.html">13. Android数据加密之Base64编码算法(16743)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5473030.html">14. Android数据加密之Aes加密(16652)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5711001.html">15. Android自定义控件之自定义属性(15430)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5645025.html">16. Android混合开发之WebView使用总结(14357)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5671622.html">17. Java学习之注解Annotation实现原理(14018)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5520384.html">18. Android探索之HttpURLConnection网络请求(13247)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5620128.html">19. Android注解使用之ButterKnife 8.0注解使用介绍(12834)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5547758.html">20. Android图片缓存之Bitmap详解(12447)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/whoislcj/p/5853393.html">1. Android业务组件化之现状分析与探讨(7)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5825333.html">2. Android业务组件化之URL Scheme使用(7)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5714760.html">3. Android自定义控件之自定义组合控件(6)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5708778.html">4. Android自定义控件之基本原理(6)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5651396.html">5. Android数据存储之GreenDao 3.0 详解(5)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5620128.html">6. Android注解使用之ButterKnife 8.0注解使用介绍(5)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5558168.html">7. Android图片缓存之初识Glide(5)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5526431.html">8. Android okHttp网络请求之Get/Post请求(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6104015.html">9. Android混合开发之WebViewJavascriptBridge实现JS与java安全交互(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6038511.html">10. Java学习之反射机制及应用场景(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6001422.html">11. Android性能优化之利用LeakCanary检测内存泄漏及解决办法(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5595714.html">12. Android消息传递之EventBus 3.0使用详解(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5738478.html">13. Android动画效果之初识Property Animation（属性动画）(4)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5733740.html">14. Android动画效果之Frame Animation（逐帧动画）(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5730520.html">15. Android动画效果之Tween Animation（补间动画）(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5551040.html">16. Android图片缓存之Lru算法(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5720202.html">17. Android自定义控件之自定义ViewGroup实现标签云(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/6429108.html">18. IOS缓存管理之YYCache使用(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5610903.html">19. Android线程管理之ThreadPoolExecutor自定义线程池(3)</a></li><li><a href="http://www.cnblogs.com/whoislcj/p/5671622.html">20. Java学习之注解Annotation实现原理(3)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2017 总李写代码
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
