@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
 
+        <!--静态广播接收器在这里注册-->
         <receiver
             android:name=".BootCompleteReceiver"
             android:enabled="true"
@@ -27,6 +28,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".MyBroadcastReceiver"
             android:enabled="true"
@@ -35,6 +37,7 @@
                 <action android:name="com.example.broadcasttest.MY_BROADCAST"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
