@@ -43,6 +43,8 @@ public class CustomTitleBar extends RelativeLayout implements View.OnClickListen
     //默认有菜单
     private boolean menu = MENU_HAVE;
 
+    private PopupMenu popup;
+
 
     //事件处理
     private SelfCustomUIAttrsEvents selfCustomUIAttrsEvents;
@@ -187,20 +189,30 @@ public class CustomTitleBar extends RelativeLayout implements View.OnClickListen
                 if(!isMenu()){
                     selfCustomUIAttrsEvents.titleBarRightBtnEvent();
                 }else{
-                    //创建弹出式菜单对象（最低版本11）
-                    PopupMenu popup = new PopupMenu(this.context, titleBarRightBtn);//第二个参数是绑定的那个view
-                    //获取菜单填充器
-                    MenuInflater inflater = popup.getMenuInflater();
-                    //填充菜单
-                    inflater.inflate(R.menu.main, popup.getMenu());
-                    //绑定菜单项的点击事件
-                    popup.setOnMenuItemClickListener(this);
-                    //显示(这一行代码不要忘记了)
-                    popup.show();
+                    checkPopupMenuExesixtAndShow();
                 }
                 break;
             default:break;
         }
+    }
+
+    /**
+     * 检查菜单存不存在不存在重新创建
+     * @return
+     */
+    private void checkPopupMenuExesixtAndShow(){
+         if(popup == null){
+             //创建弹出式菜单对象（最低版本11）
+             popup =  new PopupMenu(this.context, titleBarRightBtn);//第二个参数是绑定的那个view
+             //获取菜单填充器
+             MenuInflater inflater = popup.getMenuInflater();
+             //填充菜单
+             inflater.inflate(R.menu.main, popup.getMenu());
+             //绑定菜单项的点击事件
+             popup.setOnMenuItemClickListener(this);
+         }
+        //显示(这一行代码不要忘记了)
+        popup.show();
     }
 
     /**
