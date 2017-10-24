@@ -11,4 +11,7 @@
                                                   一：比如限于篇幅，郭霖大神讲解listView RecyclerView中没有下拉刷新上拉加载功能，
 												  我有集成了该功能，RecyclerView方式： * https://github.com/niniloveyou/SwipeRecyclerView      * SwipeRefreshLayout + RecyclerView 实现的下拉刷新，上拉加载更多；
 												                    listView方式：     * https://github.com/chrisbanes/Android-PullToRefresh   * listView 实现的下拉刷新，上拉加载更多；
+																	
+																	
+****************booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs ，其中实现了自定UI attrs功能的的仿支付宝和QQ右上角的三个点点的pupmenu效果。************************																	
 																																					
