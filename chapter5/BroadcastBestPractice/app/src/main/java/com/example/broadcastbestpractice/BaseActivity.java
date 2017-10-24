@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
@@ -19,6 +20,9 @@ public class BaseActivity extends AppCompatActivity {
         ActivityCollector.addActivity(this);
     }
 
+    /**
+     * 注册的时候调用
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -31,18 +35,26 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    /**
+     * 销毁的时候调用
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (receiver != null) {
             unregisterReceiver(receiver);
             receiver = null;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
         ActivityCollector.removeActivity(this);
     }
 
+
+
+    /**
+     * 强制下线的广播接收器
+     */
     class ForceOfflineReceiver extends BroadcastReceiver {
 
         @Override
@@ -50,7 +62,8 @@ public class BaseActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Warning");
             builder.setMessage("You are forced to be offline. Please try to login again.");
-            builder.setCancelable(false);
+            //可以取消
+            builder.setCancelable(true);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
