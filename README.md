@@ -1,4 +1,5 @@
 # 关注郭霖大神的微信公众号学习更多技术
+致歉郭霖大神：非常感谢你的第一行代码这本书。同时电子书自己在网上找的，现在上传到该项目下，如果郭霖大神不许的话我会尽快删除电子书！
 
 <img src="https://raw.githubusercontent.com/guolindev/booksource/master/qrcode.jpg" width="250" />
 
