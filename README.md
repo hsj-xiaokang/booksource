@@ -31,6 +31,14 @@ http://www.cnblogs.com/xch-yang/p/6017685.html
 http://www.cnblogs.com/whoislcj/p/5714760.html
 ************************
 
+
+*****************************
+三：动态权限的最佳实践解决方式之一，参考郭神视频
+ * 郭神视频录播地址：http://edu.csdn.net/course/detail/3539
+ * 整理的博客地址：http://blog.csdn.net/qq_31715429/article/details/52885787
+booksource\chapter7\RuntimePermissionTest
+******************************
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
