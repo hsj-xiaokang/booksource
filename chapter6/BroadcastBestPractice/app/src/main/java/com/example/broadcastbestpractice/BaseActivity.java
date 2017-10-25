@@ -13,36 +13,44 @@ public class BaseActivity extends AppCompatActivity {
 
     private ForceOfflineReceiver receiver;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //添加activity
         ActivityCollector.addActivity(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.example.broadcastbestpractice.FORCE_OFFLINE");
-        receiver = new ForceOfflineReceiver();
-        registerReceiver(receiver, intentFilter);
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("com.example.broadcastbestpractice.FORCE_OFFLINE");
+            receiver = new ForceOfflineReceiver();
+            registerReceiver(receiver, intentFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    /**
+     * 销毁
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (receiver != null) {
             unregisterReceiver(receiver);
             receiver = null;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
         ActivityCollector.removeActivity(this);
     }
 
+    /**
+     * 广播接收器
+     */
     class ForceOfflineReceiver extends BroadcastReceiver {
 
         @Override
