@@ -2,6 +2,9 @@ package com.example.litepaltest;
 
 import org.litepal.crud.DataSupport;
 
+/**
+ * 继承拥有更多的方法
+ */
 public class Book extends DataSupport {
 
     private int id;

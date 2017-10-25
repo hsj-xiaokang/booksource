@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
+    <!--数据库名称-->
     <dbname value="BookStore" ></dbname>
-
+    <!--版本号只要在这里main修改-->
     <version value="2" ></version>
-
+    <!--映射的视实体-->
     <list>
         <mapping class="com.example.litepaltest.Book"></mapping>
         <mapping class="com.example.litepaltest.Category"></mapping>
