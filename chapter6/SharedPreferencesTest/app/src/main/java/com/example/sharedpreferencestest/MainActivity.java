@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 
 /**
+ *
+ *  ############注意文件文不要弄成目录路径#######
  *  1.getSharedPreferences
  *                   说明：该方法是context里面的，第一个参数文件名称，文件都存放在/data/data/<package-name>/shared_prefs/目录下面
  *                                              第二个参数是唯一的一个MODE_PRIVATE模式
