@@ -39,6 +39,10 @@ http://www.cnblogs.com/whoislcj/p/5714760.html
 booksource\chapter7\RuntimePermissionTest
 ******************************
 
+*******************************
+四.只有第一次调用SQLiteOpenHelper.getWritableDatabase或者SQLiteOpenHelper.getReadableDatabase才会创建数据库
+*******************************
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)

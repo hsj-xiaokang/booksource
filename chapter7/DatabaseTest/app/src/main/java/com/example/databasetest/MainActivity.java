@@ -17,14 +17,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         dbHelper = new MyDatabaseHelper(this, "BookStore.db", null, 2);
+
         Button createDatabase = (Button) findViewById(R.id.create_database);
+
         createDatabase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //第一次调用创建数据库
                 dbHelper.getWritableDatabase();
             }
         });
+
         Button addData = (Button) findViewById(R.id.add_data);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 db.insert("Book", null, values); // 插入第二条数据
             }
         });
+
+
         Button updateData = (Button) findViewById(R.id.update_data);
         updateData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 db.update("Book", values, "name = ?", new String[] { "The Da Vinci Code" });
             }
         });
+
+
         Button deleteButton = (Button) findViewById(R.id.delete_data);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 db.delete("Book", "pages > ?", new String[] { "500" });
             }
         });
+
+
         Button queryButton = (Button) findViewById(R.id.query_data);
         queryButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,13 +10,14 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
+    //long newBookId
     private String newId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button addData = (Button) findViewById(R.id.add_data);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
                 newId = newUri.getPathSegments().get(1);
             }
         });
+
+
         Button queryData = (Button) findViewById(R.id.query_data);
         queryData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
         Button updateData = (Button) findViewById(R.id.update_data);
         updateData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 getContentResolver().update(uri, values, null, null);
             }
         });
+
+
         Button deleteData = (Button) findViewById(R.id.delete_data);
         deleteData.setOnClickListener(new View.OnClickListener() {
             @Override

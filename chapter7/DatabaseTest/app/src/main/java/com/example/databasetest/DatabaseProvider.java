@@ -31,6 +31,10 @@ public class DatabaseProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, "category/#", CATEGORY_ITEM);
     }
 
+    /**
+     * 只有在ContentResolver尝试访问我们程序的数据时，才会被初始化
+     * @return
+     */
     @Override
     public boolean onCreate() {
         dbHelper = new MyDatabaseHelper(getContext(), "BookStore.db", null, 2);
@@ -148,6 +152,7 @@ public class DatabaseProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/vnd.com.example.databasetest. provider.category";
             case CATEGORY_ITEM:
                 return "vnd.android.cursor.item/vnd.com.example.databasetest. provider.category";
+            default:break;
         }
         return null;
     }
