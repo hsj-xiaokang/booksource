@@ -56,7 +56,17 @@ booksource\chapter7\RuntimePermissionTest
 
 ***************************************
 六.通知可以再activity，广播接收器，service里面创建
-***************************************									 
+***************************************		
+
+***************************************
+七.使用fastjson
+https://yq.aliyun.com/articles/69641
+http://blog.csdn.net/feelang/article/details/41783317
+compile 'com.alibaba:fastjson:1.2.10'
+compile 'com.alibaba:fastjson:1.2.24'
+compile 'com.alibaba:fastjson:1.1.56.android'
+compile 'com.alibaba:fastjson:latest.integration'
+***************************************							 
                                       									 
 
 *******************************************************************************************************
