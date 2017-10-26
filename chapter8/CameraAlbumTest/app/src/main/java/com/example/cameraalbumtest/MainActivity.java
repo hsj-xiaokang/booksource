@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     try {
                         // 将拍摄的照片显示出来
+                        Toast.makeText(this,imageUri.getPath(),Toast.LENGTH_SHORT).show();
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                         picture.setImageBitmap(bitmap);
                     } catch (Exception e) {
@@ -217,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
+            Toast.makeText(this,imagePath,Toast.LENGTH_SHORT).show();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             picture.setImageBitmap(bitmap);
         } else {
