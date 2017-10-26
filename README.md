@@ -43,6 +43,22 @@ booksource\chapter7\RuntimePermissionTest
 四.只有第一次调用SQLiteOpenHelper.getWritableDatabase或者SQLiteOpenHelper.getReadableDatabase才会创建数据库
 *******************************
 
+*******************************
+五.视频播放
+1.TextureView+SurfaceTexture+OpenGL ES来播放视频 github:https://github.com/ChouRay/PlayVideo-OpenGL和博客：
+                                     1.http://blog.csdn.net/Ray_Chou/article/details/48416467
+									 2.http://blog.csdn.net/ray_chou/article/details/48453473
+									 3.http://blog.csdn.net/ray_chou/article/details/48473055
+2.MediaPlayer+SurfaceView来进行播放视频
+                                     1.http://blog.csdn.net/sno_guo/article/details/7770033
+3.第一行代码第二版第七章
+*********************************
+
+***************************************
+六.通知可以再activity，广播接收器，service里面创建
+***************************************									 
+                                      									 
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)

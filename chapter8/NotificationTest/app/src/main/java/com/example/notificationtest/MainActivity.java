@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button sendNotice = (Button) findViewById(R.id.send_notice);
         sendNotice.setOnClickListener(this);
     }
@@ -31,8 +32,11 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         switch (v.getId()) {
             case R.id.send_notice:
                 Intent intent = new Intent(this, NotificationActivity.class);
+                //设置可以点击intent【延迟的intent】
                 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+                //获取NotificationManager
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                //构建Notification
                 Notification notification = new NotificationCompat.Builder(this)
                         .setContentTitle("This is content title")
                         .setContentText("This is content text")
@@ -40,14 +44,16 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                         .setContentIntent(pi)
-                //        .setSound(Uri.fromFile(new File("/system/media/audio/ringtones/Luna.ogg")))
-                //        .setVibrate(new long[]{0, 1000, 1000, 1000})
-                //        .setLights(Color.GREEN, 1000, 1000)
+//                        .setAutoCancel(true)
+                        .setSound(Uri.fromFile(new File("/system/media/audio/ringtones/Luna.ogg")))
+                        .setVibrate(new long[]{0, 1000, 1000, 1000})
+                        .setLights(Color.GREEN, 1000, 1000)
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
-                //        .setStyle(new NotificationCompat.BigTextStyle().bigText("Learn how to build notifications, send and sync data, and use voice actions. Get the official Android IDE and developer tools to build apps for Android."))
+//                        .setStyle(new NotificationCompat.BigTextStyle().bigText("Learn how to build notifications, send and sync data, and use voice actions. Get the official Android IDE and developer tools to build apps for Android."))
                         .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.big_image)))
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build();
+                //启动NotificationManager
                 manager.notify(1, notification);
                 break;
             default:

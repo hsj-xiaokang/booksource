@@ -42,13 +42,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button takePhoto = (Button) findViewById(R.id.take_photo);
         Button chooseFromAlbum = (Button) findViewById(R.id.choose_from_album);
         picture = (ImageView) findViewById(R.id.picture);
+
+        //拍照
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 创建File对象，用于存储拍照后的图片
+                // getExternalCacheDir从android6.0开始存取sd卡是危险的权限操作，详细见第二行代码第八长辈296页
                 File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
                 try {
                     if (outputImage.exists()) {
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, TAKE_PHOTO);
             }
         });
+        //相册选择
         chooseFromAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,12 +86,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 打开相册必须请求权限
+     */
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
         startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
     }
 
+    /**
+     * 权限请求
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -101,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * activity结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -132,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 大于API19
+     * @param data
+     */
     @TargetApi(19)
     private void handleImageOnKitKat(Intent data) {
         String imagePath = null;
@@ -158,12 +182,22 @@ public class MainActivity extends AppCompatActivity {
         displayImage(imagePath); // 根据图片路径显示图片
     }
 
+    /**
+     * 小于API19
+     * @param data
+     */
     private void handleImageBeforeKitKat(Intent data) {
         Uri uri = data.getData();
         String imagePath = getImagePath(uri, null);
         displayImage(imagePath);
     }
 
+    /**
+     * 获取图片路径
+     * @param uri
+     * @param selection
+     * @return
+     */
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         // 通过Uri和selection来获取真实的图片路径
@@ -177,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
         return path;
     }
 
+    /**
+     * 展示图片
+     * @param imagePath
+     */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
