@@ -17,6 +17,9 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    /**
+     * video对象
+     */
     private VideoView videoView;
 
     @Override
@@ -37,11 +40,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 初始化
+     */
     private void initVideoPath() {
         File file = new File(Environment.getExternalStorageDirectory(), "movie.mp4");
         videoView.setVideoPath(file.getPath()); // 指定视频文件的路径
     }
 
+    /**
+     * 权限
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -57,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -75,9 +91,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     videoView.resume(); // 重新播放
                 }
                 break;
+            default:break;
         }
     }
 
+    /**
+     * 销毁
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

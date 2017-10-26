@@ -16,18 +16,24 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    /**
+     * 播放器对象
+     */
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button play = (Button) findViewById(R.id.play);
         Button pause = (Button) findViewById(R.id.pause);
         Button stop = (Button) findViewById(R.id.stop);
+
         play.setOnClickListener(this);
         pause.setOnClickListener(this);
         stop.setOnClickListener(this);
+
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
         } else {
@@ -35,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 初始化播放器
+     */
     private void initMediaPlayer() {
         try {
             File file = new File(Environment.getExternalStorageDirectory(), "music.mp3");
@@ -45,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 权限
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -60,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -84,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 销毁
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
