@@ -69,7 +69,7 @@ compile 'com.alibaba:fastjson:latest.integration'
 ***************************************		
 
 *****************************************
-七.sax pull 解析
+八.sax pull 解析
 sax   SAX加载到内存（DOM） 实际项目基本不用
 pull  Pull基于事件 实际项目基本不用	
 
@@ -82,7 +82,80 @@ rxjava 基于观察者模式，推方式：传递数据给watcher
 观察者模式介绍如下：
 http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2016/0518/4270.html
 
-*****************************************				 
+*****************************************	
+
+
+
+**************************************************
+九.
+服务service是依赖于自己的当前的运用程序的进程里面，当前程序被杀掉的时候进程也就挂了；
+服务并没有开启新的线程，需要自己开启线程，不然会阻塞主线程
+
+多线程的学习！！！！！！博客：http://blog.csdn.net/aboy123/article/details/38307539/
+1.继承Thread，然后start()运行
+2.实现Runable（无返回值的任务必须Runnable接口）, new Thread(aRunableImplementObject).start();
+
+3.使用ExecutorService、Callable、Future实现有返回结果的多线程（可返回值的任务必须实现Callable接口）
+import java.util.concurrent.*;  
+import java.util.Date;  
+import java.util.List;  
+import java.util.ArrayList;  
+  
+/** 
+* 有返回值的线程 
+*/  
+@SuppressWarnings("unchecked")  
+public class Test {  
+public static void main(String[] args) throws ExecutionException,  
+    InterruptedException {  
+   System.out.println("----程序开始运行----");  
+   Date date1 = new Date();  
+  
+   int taskSize = 5;  
+   // 创建一个线程池  
+   ExecutorService pool = Executors.newFixedThreadPool(taskSize);  
+   // 创建多个有返回值的任务  
+   List<Future> list = new ArrayList<Future>();  
+   for (int i = 0; i < taskSize; i++) {  
+    Callable c = new MyCallable(i + " ");  
+    // 执行任务并获取Future对象  
+    Future f = pool.submit(c);  
+    // System.out.println(">>>" + f.get().toString());  
+    list.add(f);  
+   }   
+  
+   // 获取所有并发任务的运行结果  
+   for (Future f : list) {  
+    // 从Future对象上获取任务的返回值，并输出到控制台  
+    System.out.println(">>>" + f.get().toString());  
+   }  
+  
+   Date date2 = new Date();  
+   System.out.println("----程序结束运行----，程序运行时间【"  
+     + (date2.getTime() - date1.getTime()) + "毫秒】");  
+}  
+}  
+  
+class MyCallable implements Callable<Object> {  
+private String taskNum;  
+  
+MyCallable(String taskNum) {  
+   this.taskNum = taskNum;  
+}  
+  
+public Object call() throws Exception {  
+   System.out.println(">>>" + taskNum + "任务启动");  
+   Date dateTmp1 = new Date();  
+   Thread.sleep(1000);  
+   Date dateTmp2 = new Date();  
+   long time = dateTmp2.getTime() - dateTmp1.getTime();  
+   System.out.println(">>>" + taskNum + "任务终止");  
+   return taskNum + "任务返回运行结果,当前任务时间【" + time + "毫秒】";  
+}  
+} 
+
+*************************************************
+			 
                                       									 
 
 *******************************************************************************************************
