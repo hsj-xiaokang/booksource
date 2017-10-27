@@ -7,8 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.example.networktest.handler.ContentHandler;
+import com.example.networktest.entity.RegeoCoding;
+import com.example.networktest.utils.ObjectUtils;
+import com.example.networktest.utils.ThreadUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,16 +28,15 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "MainActivity";
 
     TextView responseText;
 
@@ -41,8 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button sendRequest = (Button) findViewById(R.id.send_request);
         responseText = (TextView) findViewById(R.id.response_text);
+
         sendRequest.setOnClickListener(this);
     }
 
@@ -54,9 +59,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 该方式httpClient已经被android团队放弃6.0
+     * 官方推荐HttpURLConnection
+     * 自己推荐okhttp3 或者支持restful的retrofit2
+     */
     private void sendRequestWithHttpURLConnection() {
         // 开启线程来发起网络请求
-        new Thread(new Runnable() {
+        ThreadUtils.addRunable2ThreadPool(new Runnable() {
             @Override
             public void run() {
                 HttpURLConnection connection = null;
@@ -91,33 +101,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
-        }).start();
+        });
     }
 
+    /**
+     * okhttp3方式
+     */
     private void sendRequestWithOkHttp() {
-        new Thread(new Runnable() {
+        ThreadUtils.addRunable2ThreadPool(new Runnable() {
             @Override
             public void run() {
                 try {
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
                             // 指定访问的服务器地址是电脑本机
-                            .url("http://10.0.2.2/get_data.json")
+//                            .url("http://www.baidu.com")
+                            .url("http://gc.ditu.aliyun.com/regeocoding?l=39.938133,116.395739&type=001")
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     parseJSONWithGSON(responseData);
-//                    parseJSONWithJSONObject(responseData);
-//                    parseXMLWithSAX(responseData);
-//                    parseXMLWithPull(responseData);
-//                    showResponse(responseData);
+//                     parseJSONWithJSONObject(responseData);
+//                     parseXMLWithSAX(responseData);
+//                     parseXMLWithPull(responseData);
+//                     showResponse(responseData);
+//                     parseJSONWithFastjson(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
+    /**
+     * Pull基于事件 实际项目基本不用
+     * @param xmlData
+     */
     private void parseXMLWithPull(String xmlData) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -160,6 +179,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *SAX加载到内存 实际项目基本不用
+     * @param xmlData
+     */
     private void parseXMLWithSAX(String xmlData) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -174,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * JSONObject解析少用，有点类似fastjson，比fastjson低下
+     * @param jsonData
+     */
     private void parseJSONWithJSONObject(String jsonData) {
         try {
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -191,21 +218,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * GSON解析
+     * @param jsonData
+     */
     private void parseJSONWithGSON(String jsonData) {
         Gson gson = new Gson();
-        List<App> appList = gson.fromJson(jsonData, new TypeToken<List<App>>() {}.getType());
-        for (App app : appList) {
-            Log.d("MainActivity", "id is " + app.getId());
-            Log.d("MainActivity", "name is " + app.getName());
-            Log.d("MainActivity", "version is " + app.getVersion());
-        }
+        RegeoCoding rc = gson.fromJson(
+                jsonData,
+                RegeoCoding.class
+        );
+        Log.d(TAG, "parseJSONWithGSON: "+ rc.getQueryLocation());
     }
 
+    /**
+     * fastjson解析json数据
+     * @param jsonData
+     */
+    private void parseJSONWithFastjson(String jsonData) throws Exception {
+        if(ObjectUtils.isEmpty(jsonData)){
+           throw new Exception("json is null");
+        }
+        com.alibaba.fastjson.JSONObject jb =  JSON.parseObject(jsonData);
+        Log.d(TAG, "parseJSONWithFastjson: "+jb.getJSONArray("queryLocation").getDouble(0));
+    }
+
+    /**
+     * runOnUiThread ：注意android不允许在子线程中更新UI，只能在主线程中更新UI
+     * @param response
+     */
     private void showResponse(final String response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // 在这里进行UI操作，将结果显示到界面上
+                Log.d(TAG, "hsj");
                 responseText.setText(response);
             }
         });

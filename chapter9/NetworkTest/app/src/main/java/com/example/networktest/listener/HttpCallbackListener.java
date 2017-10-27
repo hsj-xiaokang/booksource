@@ -1,4 +1,4 @@
-package com.example.networktest;
+package com.example.networktest.listener;
 
 public interface HttpCallbackListener {
 

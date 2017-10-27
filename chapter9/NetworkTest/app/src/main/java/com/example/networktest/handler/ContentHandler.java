@@ -1,4 +1,4 @@
-package com.example.networktest;
+package com.example.networktest.handler;
 
 import android.util.Log;
 
@@ -6,6 +6,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * sax解析时候使用到的handler
+ */
 public class ContentHandler extends DefaultHandler {
 
     private String nodeName;

@@ -66,7 +66,23 @@ compile 'com.alibaba:fastjson:1.2.10'
 compile 'com.alibaba:fastjson:1.2.24'
 compile 'com.alibaba:fastjson:1.1.56.android'
 compile 'com.alibaba:fastjson:latest.integration'
-***************************************							 
+***************************************		
+
+*****************************************
+七.sax pull 解析
+sax   SAX加载到内存（DOM） 实际项目基本不用
+pull  Pull基于事件 实际项目基本不用	
+
+网络使用gson解析json 或者阿里巴巴的fastjson
+okhttp3 或者 retrofit2（底层依然是okhttp，继续封装成restful风格的编程方式）
+
+rxjava 基于观察者模式，推方式：传递数据给watcher
+                       拉方式：传递被观察者自己给watcher，watcher自己获取
+
+观察者模式介绍如下：
+http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2016/0518/4270.html
+
+*****************************************				 
                                       									 
 
 *******************************************************************************************************
