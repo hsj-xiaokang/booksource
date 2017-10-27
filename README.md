@@ -96,6 +96,8 @@ http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2016/0518/4270.html
 2.实现Runable（无返回值的任务必须Runnable接口）, new Thread(aRunableImplementObject).start();
 
 3.使用ExecutorService、Callable、Future实现有返回结果的多线程（可返回值的任务必须实现Callable接口）
+
+
 import java.util.concurrent.*;  
 import java.util.Date;  
 import java.util.List;  
@@ -166,7 +168,14 @@ http://www.cnblogs.com/liyiran/p/6393813.html
 **************************************************
 十一.通知和前台服务的区别
 通知：booksource\chapter8\NotificationTest\app\src\main\java\com\example\notificationtest
- Intent intent = new Intent(this, NotificationActivity.class);
+前台服务：booksource\chapter10\ServiceTest\app\src\main\java\com\example\servicetest
+
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+
+                Intent intent = new Intent(this, NotificationActivity.class);
                 //设置可以点击intent【延迟的intent】
                 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
                 //获取NotificationManager
@@ -191,8 +200,13 @@ http://www.cnblogs.com/liyiran/p/6393813.html
                 //启动NotificationManager
                 manager.notify(1, notification);
 				
-前台服务：booksource\chapter10\ServiceTest\app\src\main\java\com\example\servicetest
- Intent intent = new Intent(this, MainActivity.class);
+				
+				
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+
+        Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle("This is content title")
