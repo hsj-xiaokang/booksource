@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)http://www.cnblogs.com/liyiran/p/6393813.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Android:使用 DownloadManager 进行版本更新 - 李亦然 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/bundle-CodingLife.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/bundle-CodingLife-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/liyiran/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/liyiran/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/liyiran/wlwmanifest.xml">
+<script async="" src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/encoder.js.下载"></script><script src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/jquery.js.下载" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'liyiran', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<style type="text/css" abt="234"></style><script>//console.log('a')
+</script><script>doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                'pps_pps': {
+                    'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
+                    'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
+                },
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if (/http:\/\/v.youku.com\/v_show\/.*/.test(window.location.href)){
+                    var tag = document.getElementById("playerBox").getAttribute("player")
+                    if (tag == "adt"){
+                        console.log("adt adv")
+                        return;
+                    }
+                }
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+// 20140730
+(function cnbeta() {
+    if (document.URL.indexOf('cnbeta.com') >= 0) {
+        var elms = document.body.querySelectorAll("p>embed");
+        Array.prototype.forEach.call(elms, function(elm) {
+            elm.style.marginLeft = "0px";
+        });
+    }
+})();
+//baidu
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+// 20140922
+(function kill_360() {
+    if (document.URL.indexOf('so.com') >= 0) {
+        document.getElementById("e_idea_pp").style.display = none;
+    }
+})();
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/liyiran/"><img id="blogLogo" src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/liyiran/">李亦然</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/liyiran/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E6%9D%8E%E4%BA%A6%E7%84%B6">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/liyiran/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/liyiran/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 300&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 5</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/liyiran/p/6393813.html">Android:使用 DownloadManager 进行版本更新</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><p>app 以前的版本更新使用的自己写的代码从服务器下载，结果出现了下载完成以后，提示解析包错误的问题，但是呢，找到该 apk 点击安装是可以安装成功的，估计就是最后几秒安装包没有下载完成然后点击了安装出现的解析包错误的问题。目前修改为通过 DownloadManager 进行下载。</p>
+<p>代码如下：</p>
+<p>1. 判断当前是否可以使用 DownloadManager (根据搜索结果，反馈说有些国产手机会把 DownloadManager 进行阉割掉，目前测试在 Nexus6, 华为Mate9, 小米 Note，华为Mate8, HTC D820U, 三星 S7 上可以使用)</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span>     <span style="color: #0000ff">private</span> <span style="color: #0000ff">static</span> <span style="color: #0000ff">boolean</span><span style="color: #000000"> canDownloadState(Context ctx) {
+</span><span style="color: #008080"> 2</span>         <span style="color: #0000ff">try</span><span style="color: #000000"> {
+</span><span style="color: #008080"> 3</span>             <span style="color: #0000ff">int</span> state = ctx.getPackageManager().getApplicationEnabledSetting("com.android.providers.downloads"<span style="color: #000000">);
+</span><span style="color: #008080"> 4</span> 
+<span style="color: #008080"> 5</span>             <span style="color: #0000ff">if</span> (state ==<span style="color: #000000"> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+</span><span style="color: #008080"> 6</span>                     || state ==<span style="color: #000000"> PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+</span><span style="color: #008080"> 7</span>                     || state ==<span style="color: #000000"> PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
+</span><span style="color: #008080"> 8</span>                 <span style="color: #0000ff">return</span> <span style="color: #0000ff">false</span><span style="color: #000000">;
+</span><span style="color: #008080"> 9</span> <span style="color: #000000">            }
+</span><span style="color: #008080">10</span>         } <span style="color: #0000ff">catch</span><span style="color: #000000"> (Exception e) {
+</span><span style="color: #008080">11</span> <span style="color: #000000">            e.printStackTrace();
+</span><span style="color: #008080">12</span>             <span style="color: #0000ff">return</span> <span style="color: #0000ff">false</span><span style="color: #000000">;
+</span><span style="color: #008080">13</span> <span style="color: #000000">        }
+</span><span style="color: #008080">14</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">true</span><span style="color: #000000">;
+</span><span style="color: #008080">15</span>     }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>2. 出现可以使用和不可以使用的情况。可以使用的话，就使用 DownloadManager 进行下载，不可以使用就交给浏览器进行下载</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span>                 <span style="color: #0000ff">if</span><span style="color: #000000"> (canDownloadState(ctx)) {
+</span><span style="color: #008080"> 2</span>                     MLog.d("UpdateVersion", "DownloadManager 可用"<span style="color: #000000">);
+</span><span style="color: #008080"> 3</span>                     Intent downloadApkIntent = <span style="color: #0000ff">new</span> Intent(ctx, DownApkServer.<span style="color: #0000ff">class</span><span style="color: #000000">);
+</span><span style="color: #008080"> 4</span>                     Bundle bundle = <span style="color: #0000ff">new</span><span style="color: #000000"> Bundle();
+</span><span style="color: #008080"> 5</span>                     bundle.putString("downloadUrl"<span style="color: #000000">, url);
+</span><span style="color: #008080"> 6</span>                     bundle.putString("title"<span style="color: #000000">, subAppName);
+</span><span style="color: #008080"> 7</span>                     downloadApkIntent.putExtra("download"<span style="color: #000000">, bundle);
+</span><span style="color: #008080"> 8</span> <span style="color: #000000">                    ctx.startService(downloadApkIntent);
+</span><span style="color: #008080"> 9</span>                 } <span style="color: #0000ff">else</span><span style="color: #000000"> {
+</span><span style="color: #008080">10</span>                     MLog.d("UpdateVersion", "DownloadManager 不可用"<span style="color: #000000">);
+</span><span style="color: #008080">11</span>                     Intent intent = <span style="color: #0000ff">new</span><span style="color: #000000"> Intent();
+</span><span style="color: #008080">12</span>                     intent.setAction("android.intent.action.VIEW"<span style="color: #000000">);
+</span><span style="color: #008080">13</span>                     Uri content_url =<span style="color: #000000"> Uri.parse(url);
+</span><span style="color: #008080">14</span> <span style="color: #000000">                    intent.setData(content_url);
+</span><span style="color: #008080">15</span> <span style="color: #000000">                    ctx.startActivity(intent);
+</span><span style="color: #008080">16</span>                 }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>3. 启动 DownApkServer 服务</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">public</span> <span style="color: #0000ff">class</span> DownApkServer <span style="color: #0000ff">extends</span><span style="color: #000000"> Service {
+</span><span style="color: #008080"> 2</span>     <span style="color: #0000ff">static</span> <span style="color: #0000ff">final</span> String TAG = "DownApkServer"<span style="color: #000000">;
+</span><span style="color: #008080"> 3</span>     Context context = <span style="color: #0000ff">this</span><span style="color: #000000">;
+</span><span style="color: #008080"> 4</span> <span style="color: #000000">    SharedPreferences mSp;
+</span><span style="color: #008080"> 5</span> 
+<span style="color: #008080"> 6</span>     <span style="color: #0000ff">public</span><span style="color: #000000"> DownApkServer() {
+</span><span style="color: #008080"> 7</span> 
+<span style="color: #008080"> 8</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 9</span> 
+<span style="color: #008080">10</span> <span style="color: #000000">    @Override
+</span><span style="color: #008080">11</span>     <span style="color: #0000ff">public</span><span style="color: #000000"> IBinder onBind(Intent intent) {
+</span><span style="color: #008080">12</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">null</span><span style="color: #000000">;
+</span><span style="color: #008080">13</span> <span style="color: #000000">    }
+</span><span style="color: #008080">14</span> 
+<span style="color: #008080">15</span> <span style="color: #000000">    @Override
+</span><span style="color: #008080">16</span>     <span style="color: #0000ff">public</span> <span style="color: #0000ff">int</span> onStartCommand(Intent intent, <span style="color: #0000ff">int</span> flags, <span style="color: #0000ff">int</span><span style="color: #000000"> startId) {
+</span><span style="color: #008080">17</span>         Bundle downloadBundle = intent.getBundleExtra("download"<span style="color: #000000">);
+</span><span style="color: #008080">18</span>         <span style="color: #0000ff">if</span> (downloadBundle != <span style="color: #0000ff">null</span><span style="color: #000000">) {
+</span><span style="color: #008080">19</span>             String downloadUrl = downloadBundle.getString("downloadUrl"<span style="color: #000000">);
+</span><span style="color: #008080">20</span>             String title = downloadBundle.getString("title"<span style="color: #000000">);
+</span><span style="color: #008080">21</span>             <span style="color: #0000ff">if</span> (!<span style="color: #000000">TextUtils.isEmpty(downloadUrl)) {
+</span><span style="color: #008080">22</span>                 mSp = context.getSharedPreferences("downloadApk"<span style="color: #000000">, MODE_PRIVATE);
+</span><span style="color: #008080">23</span>                 <span style="color: #0000ff">long</span> downloadId =<span style="color: #000000"> downloadApk(downloadUrl, title);
+</span><span style="color: #008080">24</span>                 mSp.edit().putLong("downloadId"<span style="color: #000000">, downloadId).commit();
+</span><span style="color: #008080">25</span> <span style="color: #000000">            }
+</span><span style="color: #008080">26</span> <span style="color: #000000">        }
+</span><span style="color: #008080">27</span> <span style="color: #000000">        stopSelf();
+</span><span style="color: #008080">28</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">super</span><span style="color: #000000">.onStartCommand(intent, flags, startId);
+</span><span style="color: #008080">29</span> <span style="color: #000000">    }
+</span><span style="color: #008080">30</span> 
+<span style="color: #008080">31</span> 
+<span style="color: #008080">32</span>     <span style="color: #0000ff">private</span> <span style="color: #0000ff">long</span><span style="color: #000000"> downloadApk(String url, String title) {
+</span><span style="color: #008080">33</span>         Uri downloadUri =<span style="color: #000000"> Uri.parse(url);
+</span><span style="color: #008080">34</span>         DownloadManager.Request request = <span style="color: #0000ff">new</span><span style="color: #000000"> DownloadManager.Request(downloadUri);
+</span><span style="color: #008080">35</span>         String apkName = title + ".apk"<span style="color: #000000">;
+</span><span style="color: #008080">36</span>         File file = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + "/" +<span style="color: #000000"> apkName);
+</span><span style="color: #008080">37</span>         <span style="color: #0000ff">if</span> (file != <span style="color: #0000ff">null</span> &amp;&amp;<span style="color: #000000"> file.exists()) {
+</span><span style="color: #008080">38</span> <span style="color: #000000">            file.delete();
+</span><span style="color: #008080">39</span> <span style="color: #000000">        }
+</span><span style="color: #008080">40</span> <span style="color: #000000">        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS,
+</span><span style="color: #008080">41</span> <span style="color: #000000">                apkName);
+</span><span style="color: #008080">42</span>         mSp.edit().putString("apkName"<span style="color: #000000">, apkName).commit();
+</span><span style="color: #008080">43</span> <span style="color: #000000">        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+</span><span style="color: #008080">44</span>         request.setVisibleInDownloadsUi(<span style="color: #0000ff">true</span><span style="color: #000000">);
+</span><span style="color: #008080">45</span> <span style="color: #000000">        request.setTitle(title);
+</span><span style="color: #008080">46</span>         DownloadManager mDownloadManager =<span style="color: #000000"> (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+</span><span style="color: #008080">47</span>         <span style="color: #0000ff">return</span><span style="color: #000000"> mDownloadManager.enqueue(request);
+</span><span style="color: #008080">48</span> <span style="color: #000000">    }
+</span><span style="color: #008080">49</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>4. 注册一个广播，DownApkReceiver</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">public</span> <span style="color: #0000ff">class</span> DownApkReceiver <span style="color: #0000ff">extends</span><span style="color: #000000"> BroadcastReceiver {
+</span><span style="color: #008080"> 2</span>     <span style="color: #0000ff">private</span> <span style="color: #0000ff">static</span> <span style="color: #0000ff">final</span> String TAG = "DownApkReceiver"<span style="color: #000000">;
+</span><span style="color: #008080"> 3</span> <span style="color: #000000">    SharedPreferences mSharedP;
+</span><span style="color: #008080"> 4</span> <span style="color: #000000">    DownloadManager mManager;
+</span><span style="color: #008080"> 5</span> <span style="color: #000000">    Context ctx;
+</span><span style="color: #008080"> 6</span> 
+<span style="color: #008080"> 7</span> <span style="color: #000000">    @Override
+</span><span style="color: #008080"> 8</span>     <span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span><span style="color: #000000"> onReceive(Context context, Intent intent) {
+</span><span style="color: #008080"> 9</span>         ctx =<span style="color: #000000"> context;
+</span><span style="color: #008080">10</span>         <span style="color: #0000ff">if</span><span style="color: #000000"> (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+</span><span style="color: #008080">11</span>             <span style="color: #0000ff">long</span> downloadApkId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L<span style="color: #000000">);
+</span><span style="color: #008080">12</span>             mSharedP = context.getSharedPreferences("downloadApk"<span style="color: #000000">, MODE_PRIVATE);
+</span><span style="color: #008080">13</span>             <span style="color: #0000ff">long</span> saveApkId = mSharedP.getLong("downloadId", -1L<span style="color: #000000">);
+</span><span style="color: #008080">14</span>             <span style="color: #0000ff">if</span> (downloadApkId ==<span style="color: #000000"> saveApkId) {
+</span><span style="color: #008080">15</span> <span style="color: #000000">                checkDownloadStatus(context, downloadApkId);
+</span><span style="color: #008080">16</span> <span style="color: #000000">            }
+</span><span style="color: #008080">17</span> <span style="color: #000000">        }
+</span><span style="color: #008080">18</span> <span style="color: #000000">    }
+</span><span style="color: #008080">19</span> 
+<span style="color: #008080">20</span>     <span style="color: #0000ff">private</span> <span style="color: #0000ff">void</span> checkDownloadStatus(Context context, <span style="color: #0000ff">long</span><span style="color: #000000"> downloadId) {
+</span><span style="color: #008080">21</span>         mManager =<span style="color: #000000"> (DownloadManager) context.getSystemService(DOWNLOAD_SERVICE);
+</span><span style="color: #008080">22</span>         DownloadManager.Query query = <span style="color: #0000ff">new</span><span style="color: #000000"> DownloadManager.Query();
+</span><span style="color: #008080">23</span> <span style="color: #000000">        query.setFilterById(downloadId);
+</span><span style="color: #008080">24</span>         Cursor cursor =<span style="color: #000000"> mManager.query(query);
+</span><span style="color: #008080">25</span>         <span style="color: #0000ff">if</span><span style="color: #000000"> (cursor.moveToFirst()) {
+</span><span style="color: #008080">26</span>             <span style="color: #0000ff">int</span> status =<span style="color: #000000"> cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+</span><span style="color: #008080">27</span>             <span style="color: #0000ff">switch</span><span style="color: #000000"> (status) {
+</span><span style="color: #008080">28</span>                 <span style="color: #0000ff">case</span><span style="color: #000000"> DownloadManager.STATUS_SUCCESSFUL:
+</span><span style="color: #008080">29</span> <span style="color: #000000">                    installApk(context);
+</span><span style="color: #008080">30</span>                     <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080">31</span>                 <span style="color: #0000ff">case</span><span style="color: #000000"> DownloadManager.STATUS_FAILED:
+</span><span style="color: #008080">32</span>                     MLog.d("DownApkReceiver", "下载失败....."<span style="color: #000000">);
+</span><span style="color: #008080">33</span>                     <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080">34</span>                 <span style="color: #0000ff">case</span><span style="color: #000000"> DownloadManager.STATUS_RUNNING:
+</span><span style="color: #008080">35</span>                     MLog.d("DownApkReceiver", "正在下载....."<span style="color: #000000">);
+</span><span style="color: #008080">36</span>                     <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080">37</span>                 <span style="color: #0000ff">default</span><span style="color: #000000">:
+</span><span style="color: #008080">38</span>                     <span style="color: #0000ff">break</span><span style="color: #000000">;
+</span><span style="color: #008080">39</span> <span style="color: #000000">            }
+</span><span style="color: #008080">40</span> <span style="color: #000000">        }
+</span><span style="color: #008080">41</span> <span style="color: #000000">    }
+</span><span style="color: #008080">42</span> 
+<span style="color: #008080">43</span>     <span style="color: #0000ff">private</span> <span style="color: #0000ff">void</span><span style="color: #000000"> installApk(Context context) {
+</span><span style="color: #008080">44</span>         String apkName = mSharedP.getString("apkName", <span style="color: #0000ff">null</span><span style="color: #000000">);
+</span><span style="color: #008080">45</span>         <span style="color: #0000ff">if</span> (apkName != <span style="color: #0000ff">null</span><span style="color: #000000">) {
+</span><span style="color: #008080">46</span>             MLog.d("DownApkReceiver", "apkName 为" +<span style="color: #000000"> apkName);
+</span><span style="color: #008080">47</span>             File file = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + "/" +<span style="color: #000000"> apkName);
+</span><span style="color: #008080">48</span>             <span style="color: #0000ff">if</span> (file != <span style="color: #0000ff">null</span><span style="color: #000000">) {
+</span><span style="color: #008080">49</span>                 Intent install = <span style="color: #0000ff">new</span> Intent("android.intent.action.VIEW"<span style="color: #000000">);
+</span><span style="color: #008080">50</span>                 Uri downloadFileUri =<span style="color: #000000"> Uri.fromFile(file);
+</span><span style="color: #008080">51</span>                 install.setDataAndType(downloadFileUri, "application/vnd.android.package-archive"<span style="color: #000000">);
+</span><span style="color: #008080">52</span> <span style="color: #000000">                install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+</span><span style="color: #008080">53</span> <span style="color: #000000">                context.startActivity(install);
+</span><span style="color: #008080">54</span>             } <span style="color: #0000ff">else</span><span style="color: #000000"> {
+</span><span style="color: #008080">55</span>                 MLog.d("DownApkReceiver", "下载失败"<span style="color: #000000">);
+</span><span style="color: #008080">56</span> <span style="color: #000000">            }
+</span><span style="color: #008080">57</span>         } <span style="color: #0000ff">else</span><span style="color: #000000"> {
+</span><span style="color: #008080">58</span>             MLog.d("DownApkReceiver", "apkName 为 null"<span style="color: #000000">);
+</span><span style="color: #008080">59</span> <span style="color: #000000">        }
+</span><span style="color: #008080">60</span> <span style="color: #000000">    }
+</span><span style="color: #008080">61</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>5. 在清单文件中，注册该广播</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008080">1</span>         <span style="color: #0000ff">&lt;</span><span style="color: #800000">receiver </span><span style="color: #ff0000">android:name</span><span style="color: #0000ff">=".subapps.api.utils.DownApkReceiver"</span><span style="color: #0000ff">&gt;</span>
+<span style="color: #008080">2</span>             <span style="color: #0000ff">&lt;</span><span style="color: #800000">intent-filter</span><span style="color: #0000ff">&gt;</span>
+<span style="color: #008080">3</span>                 <span style="color: #0000ff">&lt;</span><span style="color: #800000">action </span><span style="color: #ff0000">android:name</span><span style="color: #0000ff">="android.intent.action.DOWNLOAD_COMPLETE"</span><span style="color: #0000ff">&gt;&lt;/</span><span style="color: #800000">action</span><span style="color: #0000ff">&gt;</span>
+<span style="color: #008080">4</span>             <span style="color: #0000ff">&lt;/</span><span style="color: #800000">intent-filter</span><span style="color: #0000ff">&gt;</span>
+<span style="color: #008080">5</span>         <span style="color: #0000ff">&lt;/</span><span style="color: #800000">receiver</span><span style="color: #0000ff">&gt;</span></pre>
+</div>
+<p>&nbsp;</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/liyiran/category/634651.html" target="_blank">Android</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6393813,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;76745abd-4611-e411-8d02-90b11c0b17d6&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/liyiran/" target="_blank"><img src="./Android_使用 DownloadManager 进行版本更新 - 李亦然 - 博客园_files/20140722102900.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/liyiran/">李亦然</a><br>
+            <a href="http://home.cnblogs.com/u/liyiran/followees">关注 - 25</a><br>
+            <a href="http://home.cnblogs.com/u/liyiran/followers">粉丝 - 10</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;76745abd-4611-e411-8d02-90b11c0b17d6&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6393813,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(6393813,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/liyiran/p/6393566.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/liyiran/p/6393566.html" title="发布于2017-02-13 14:13">Android:UI 沉浸式体验，适合第一屏的引导图片、预览图片。</a><br><a href="http://www.cnblogs.com/liyiran/p/6406091.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/liyiran/p/6406091.html" title="发布于2017-02-16 15:49">设计模式-策略模式（Strategy Pattern）</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-02-13 15:01</span> <a href="http://www.cnblogs.com/liyiran/">李亦然</a> 阅读(<span id="post_view_count">2052</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6393813" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/liyiran/p/6393813.html#" onclick="AddToWz(6393813);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=192269,cb_entryId=6393813,cb_blogApp=currentBlogApp,cb_blogUserGuid='76745abd-4611-e411-8d02-90b11c0b17d6',cb_entryCreatedDate='2017/2/13 15:01:00';loadViewCount(cb_entryId);</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/liyiran/p/6393813.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/liyiran/p/6393813.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/581121/" target="_blank">钛媒体独家曝光贾跃亭在美国的“金蝉脱壳”计划：FF破产卖掉</a><br> ·  <a href="http://news.cnblogs.com/n/581120/" target="_blank">高瓴资本 · 张磊：投资人要用长远的眼光看问题做选择，懂得滞后满足</a><br> ·  <a href="http://news.cnblogs.com/n/581115/" target="_blank">解构趣店：未杜绝校园贷、实际利率高于协议利率</a><br> ·  <a href="http://news.cnblogs.com/n/581116/" target="_blank">比尔·盖茨书单分享：“为我打开新世界”的三本书</a><br> ·  <a href="http://news.cnblogs.com/n/581114/" target="_blank">中国散裂中子源首次打靶成功，获得中子束流</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/579480/" target="_blank">实用VPC虚拟私有云设计原则</a><br> ·  <a href="http://kb.cnblogs.com/page/576251/" target="_blank">如何阅读计算机科学类的书</a><br> ·  <a href="http://kb.cnblogs.com/page/578103/" target="_blank">Google 及其云智慧</a><br> ·  <a href="http://kb.cnblogs.com/page/575829/" target="_blank">做到这一点，你也可以成为优秀的程序员</a><br> ·  <a href="http://kb.cnblogs.com/page/566880/" target="_blank">写给立志做码农的大学生</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/liyiran/">李亦然</a><br>园龄：<a href="http://home.cnblogs.com/u/liyiran/" title="入园时间：2014-07-22">3年3个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/liyiran/followers/">10</a><br>关注：<a href="http://home.cnblogs.com/u/liyiran/followees/">25</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;76745abd-4611-e411-8d02-90b11c0b17d6&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/09/01&#39;);return false;">&lt;</a></td><td align="center">2017年10月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/11/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">24</td><td class="CalOtherMonthDay" align="center">25</td><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td></tr><tr><td class="CalWeekendDay" align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td class="CalWeekendDay" align="center">7</td></tr><tr><td class="CalWeekendDay" align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td class="CalWeekendDay" align="center">14</td></tr><tr><td class="CalWeekendDay" align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center"><a href="http://www.cnblogs.com/liyiran/archive/2017/10/18.html"><u>18</u></a></td><td align="center"><a href="http://www.cnblogs.com/liyiran/archive/2017/10/19.html"><u>19</u></a></td><td align="center"><a href="http://www.cnblogs.com/liyiran/archive/2017/10/20.html"><u>20</u></a></td><td class="CalWeekendDay" align="center">21</td></tr><tr><td class="CalWeekendDay" align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalTodayDay" align="center">27</td><td class="CalWeekendDay" align="center">28</td></tr><tr><td class="CalWeekendDay" align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/liyiran/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/liyiran/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/liyiran/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/liyiran/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/liyiran/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/liyiran/category/634651.html">Android(210)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/liyiran/category/812489.html">Android Studio(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/liyiran/category/634650.html">Appium(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/liyiran/category/634648.html">Django(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/liyiran/category/812490.html">Eclipse</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/liyiran/category/665926.html">Flask(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/liyiran/category/634652.html">Git(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/liyiran/category/687332.html">Java(42)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/liyiran/category/634649.html">Python(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/liyiran/category/683161.html">Scrapy(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/liyiran/category/768968.html">Tomcat(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/liyiran/category/1020833.html">计算机网络(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/liyiran/category/939415.html">设计模式(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/liyiran/category/1025848.html">书单(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/liyiran/category/961401.html">数据结构和算法(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/liyiran/category/1020835.html">数据库(4)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/liyiran/archive/2017/10.html">2017年10月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/liyiran/archive/2017/09.html">2017年9月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/liyiran/archive/2017/08.html">2017年8月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/liyiran/archive/2017/07.html">2017年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/liyiran/archive/2017/06.html">2017年6月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/liyiran/archive/2017/05.html">2017年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/liyiran/archive/2017/04.html">2017年4月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/liyiran/archive/2017/03.html">2017年3月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/liyiran/archive/2017/02.html">2017年2月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/liyiran/archive/2017/01.html">2017年1月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="http://www.cnblogs.com/liyiran/archive/2016/12.html">2016年12月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/liyiran/archive/2016/11.html">2016年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="http://www.cnblogs.com/liyiran/archive/2016/10.html">2016年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="http://www.cnblogs.com/liyiran/archive/2016/09.html">2016年9月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="http://www.cnblogs.com/liyiran/archive/2016/08.html">2016年8月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/liyiran/archive/2016/07.html">2016年7月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/liyiran/archive/2016/06.html">2016年6月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="http://www.cnblogs.com/liyiran/archive/2016/05.html">2016年5月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="http://www.cnblogs.com/liyiran/archive/2016/04.html">2016年4月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/liyiran/archive/2016/03.html">2016年3月 (29)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="http://www.cnblogs.com/liyiran/archive/2016/02.html">2016年2月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/liyiran/archive/2016/01.html">2016年1月 (19)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="http://www.cnblogs.com/liyiran/archive/2015/12.html">2015年12月 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="http://www.cnblogs.com/liyiran/archive/2015/11.html">2015年11月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="http://www.cnblogs.com/liyiran/archive/2015/10.html">2015年10月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="http://www.cnblogs.com/liyiran/archive/2015/09.html">2015年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="http://www.cnblogs.com/liyiran/archive/2015/08.html">2015年8月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="http://www.cnblogs.com/liyiran/archive/2015/07.html">2015年7月 (58)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="http://www.cnblogs.com/liyiran/archive/2015/06.html">2015年6月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="http://www.cnblogs.com/liyiran/archive/2015/05.html">2015年5月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="http://www.cnblogs.com/liyiran/archive/2015/04.html">2015年4月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="http://www.cnblogs.com/liyiran/archive/2015/03.html">2015年3月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="http://www.cnblogs.com/liyiran/archive/2015/02.html">2015年2月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="http://www.cnblogs.com/liyiran/archive/2015/01.html">2015年1月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="http://www.cnblogs.com/liyiran/archive/2014/12.html">2014年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="http://www.cnblogs.com/liyiran/archive/2014/11.html">2014年11月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_36" href="http://www.cnblogs.com/liyiran/archive/2014/10.html">2014年10月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_37" href="http://www.cnblogs.com/liyiran/archive/2014/08.html">2014年8月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_38" href="http://www.cnblogs.com/liyiran/archive/2014/07.html">2014年7月 (3)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/liyiran/p/6558652.html#3747080">1. Re:Android 推送集成华为，小米，友盟</a></li>
+        <li class="recent_comment_body">多推送Demo分享下</li>
+        <li class="recent_comment_author">--android_niu</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/liyiran/p/4633559.html#3739894">2. Re:Android开发之全局获取Context的技巧</a></li>
+        <li class="recent_comment_body">这种方式谷歌并不推荐，因为可能会导致内存泄漏问题</li>
+        <li class="recent_comment_author">--旋风小伙</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/liyiran/p/5081972.html#3670398">3. Re:Android开发之多媒体编程之获取图片的副本</a></li>
+        <li class="recent_comment_body">bmSrc.getConfig() ，我的这一句话得到的为空值，为什么</li>
+        <li class="recent_comment_author">--奋斗的码农—在校学生</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/liyiran/p/5250823.html#3593461">4. Re:Android开发之onActivityResult()中的resultCode为0，intent为null的解决办法</a></li>
+        <li class="recent_comment_body">非常感谢！ 完美解决了我的问题！ 初学 搞了一两个小时了</li>
+        <li class="recent_comment_author">--Parasis</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/liyiran/p/4209603.html#3103081">5. Re:Python中的函数对象与闭包</a></li>
+        <li class="recent_comment_body">def a(number): def b(x): return number*x return babc=a(5)print abc(2)函数b就是个闭包，number是个自......</li>
+        <li class="recent_comment_author">--李亦然</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/liyiran/p/4607817.html">1. Java之数组array和集合list、set、map(11082)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5228771.html">2. Android Handler 避免内存泄漏的用法总结(6855)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/4656821.html">3. Android开发之PendingIntent的使用(6516)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5367992.html">4. Error running app: Instant Run requires 'Tools | Android | Enable ADB integration' to be enabled.解决办法(4567)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/6558652.html">5. Android 推送集成华为，小米，友盟(4296)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/liyiran/p/4209603.html">1. Python中的函数对象与闭包(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/4633559.html">2. Android开发之全局获取Context的技巧(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5250823.html">3. Android开发之onActivityResult()中的resultCode为0，intent为null的解决办法(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5081972.html">4. Android开发之多媒体编程之获取图片的副本(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/6558652.html">5. Android 推送集成华为，小米，友盟(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/liyiran/p/4607817.html">1. Java之数组array和集合list、set、map(2)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/4452495.html">2. [转] Windows下使用Python读取Excel表格数据(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5250823.html">3. Android开发之onActivityResult()中的resultCode为0，intent为null的解决办法(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5228771.html">4. Android Handler 避免内存泄漏的用法总结(1)</a></li><li><a href="http://www.cnblogs.com/liyiran/p/5081972.html">5. Android开发之多媒体编程之获取图片的副本(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2017 李亦然
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
