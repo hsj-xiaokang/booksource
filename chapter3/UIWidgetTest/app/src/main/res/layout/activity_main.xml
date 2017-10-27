@@ -79,6 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="查看自己定义的UI_Attrs"
+        android:background="@drawable/buttomborder"
         />
 
 </LinearLayout>

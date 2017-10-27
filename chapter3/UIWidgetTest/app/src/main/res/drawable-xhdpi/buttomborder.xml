@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:layout_height="wrap_content" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+    对layer-list样式，是按照顺序堆叠的，所以最上层的放在最后面，而且如果设置了progressDrawable
+    的属性，再去设置progressbar的background是没有效果的
+    -->
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="5dp" />         <!-- 圆角 -->
+            <padding android:bottom="@dimen/activity_vertical_margin"/>
+            <solid android:color="@color/colorAccent" />   <!-- 描边 -->
+        </shape>
+    </item>
+
+</layer-list>
