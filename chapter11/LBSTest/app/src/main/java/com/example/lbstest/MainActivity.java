@@ -24,6 +24,9 @@ import com.baidu.mapapi.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * VMsR1SFCpieqTS1MmGYpzrS9NbcCMSTu   百度密匙
+ */
 public class MainActivity extends AppCompatActivity {
 
     public LocationClient mLocationClient;
