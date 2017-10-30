@@ -231,6 +231,13 @@ import android.app.PendingIntent;
          // manager.notify(1, notification);
         startForeground(1, notification);
 ****************************************************
+
+************************************************
+十二 
+ material design
+http://www.androidchina.net/1381.html
+这和了下拉刷新，上拉加载 book\booksource\chapter12\MaterialTest
+***********************************************
 			 
                                       									 
 
