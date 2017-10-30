@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!--android:statusBarColor从21才会有，5.0之前没有这个功能，所以建立在这个文件夹下面-->
     <style name="FruitActivityTheme" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

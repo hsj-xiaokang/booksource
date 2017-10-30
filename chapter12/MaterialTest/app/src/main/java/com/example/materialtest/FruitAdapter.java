@@ -64,6 +64,8 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         Fruit fruit = mFruitList.get(position);
         holder.fruitName.setText(fruit.getName());
+        //另外一种方式
+        //Glide一个强大的图片加载库   http://github.com/bumptech/glide
         Glide.with(mContext).load(fruit.getImageId()).into(holder.fruitImage);
     }
 

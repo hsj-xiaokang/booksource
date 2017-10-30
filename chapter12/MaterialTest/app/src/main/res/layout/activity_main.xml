@@ -5,11 +5,11 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <!--CoordinatorLayout是一个加强版的FramLayout-->
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <!--顶部浮动Toolbar添加AppBarLayout主要是不遮挡Toolbar-->
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,8 +23,8 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_scrollFlags="scroll|enterAlways|snap" />
         </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.SwipeRefreshLayout
+        <!--内容-->
+        <!--<android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,8 +34,15 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>-->
 
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"作用是使com.example.materialtest.SwipeRecyclerView在APPbar下面-->
+        <com.example.materialtest.SwipeRecyclerView
+            android:id="@+id/swipeRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+          <!--浮动ActionButton-->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -45,6 +52,7 @@
             android:src="@drawable/ic_done" />
     </android.support.design.widget.CoordinatorLayout>
 
+    <!--侧滑菜单-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
