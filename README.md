@@ -243,7 +243,7 @@ http://www.androidchina.net/1381.html
 ************************************************
 十三 
 多窗口模式
-<activity android:configChangs="orientation|keyborderHidden|screenSize|screenLayout" />
+activity android:configChangs="orientation|keyborderHidden|screenSize|screenLayout" 
 加入该配置后，无论是多窗口还是横竖屏，活动都不会被重新创建，而是会将屏幕变化的事件通知到Activity的onConfigurationChanged()方法里面，处理屏幕变化的逻辑代码.
 
 多窗口模式视频的暂停逻辑应该在onstop里面处理，在onstart里面恢复视频播放.
@@ -251,14 +251,14 @@ http://www.androidchina.net/1381.html
 
 
 禁用多窗口模式代码：该属性只能在API大于24上面有用
-<application android:resizebleActivity="false">
-</application>
+application android:resizebleActivity="false"
+
 
 
 
 
 横屏竖屏portrait landscape：
-<activity android:screenOrientation="portrait" />
+activity android:screenOrientation="portrait" 
 ***********************************************
 			 
                                       									 
