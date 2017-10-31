@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BeastActionTest</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="intent_serializable">intent_serializable</string>
+    <string name="intent_parceble">intent_parceble</string>
+    <string name="alarm_test">alarm_test</string>
+</resources>
