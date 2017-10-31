@@ -35,22 +35,49 @@ public class ChooseAreaFragment extends Fragment {
 
     private static final String TAG = "ChooseAreaFragment";
 
+    /**
+     * 省
+     */
     public static final int LEVEL_PROVINCE = 0;
 
+    /**
+     * 市
+     */
     public static final int LEVEL_CITY = 1;
 
+    /**
+     * 县
+     */
     public static final int LEVEL_COUNTY = 2;
 
+    /**
+     * 加载数据的进度条
+     */
     private ProgressDialog progressDialog;
 
+    /**
+     * 标题
+     */
     private TextView titleText;
 
+    /**
+     * 返回按钮
+     */
     private Button backButton;
 
+    /**
+     * 数据展示
+     */
     private ListView listView;
 
+    /**
+     * 适配器
+     */
     private ArrayAdapter<String> adapter;
 
+    /**
+     * 数据源
+     */
     private List<String> dataList = new ArrayList<>();
 
     /**
@@ -84,39 +111,66 @@ public class ChooseAreaFragment extends Fragment {
     private int currentLevel;
 
 
+    /**
+     * 碎片创建视图的时候调用
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.choose_area, container, false);
+
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
+
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
+
         return view;
     }
 
+    /**
+     * 绑定到Activity的时候使用
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        /**
+         * 绑定listView的事件
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectedProvince = provinceList.get(position);
+                    //当前是省，下一级是城市
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
+                    //当前是城市，下一级是县
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
+                    //当前是县，查询天气开始
                     String weatherId = countyList.get(position).getWeatherId();
+                    //获取绑定的activity，判断实在哪个activity里面？
                     if (getActivity() instanceof MainActivity) {
+                        //当前是在MainActivity里面
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
                         startActivity(intent);
+                        //销毁当前的activity
                         getActivity().finish();
                     } else if (getActivity() instanceof WeatherActivity) {
+                        //当前是在WeatherActivity里面
                         WeatherActivity activity = (WeatherActivity) getActivity();
+                        //home菜单收缩
                         activity.drawerLayout.closeDrawers();
                         activity.swipeRefresh.setRefreshing(true);
                         activity.requestWeather(weatherId);
@@ -124,16 +178,24 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
+
+        /**
+         * 返回按钮的事件
+         */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentLevel == LEVEL_COUNTY) {
+                    //返回上级查询城市，当前是县
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
+                    //返回上级查询省，当前是城市
                     queryProvinces();
                 }
             }
         });
+
+        //查询省，绑定到activity的时候
         queryProvinces();
     }
 
@@ -143,6 +205,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryProvinces() {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
+
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();

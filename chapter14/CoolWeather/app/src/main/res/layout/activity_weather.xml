@@ -4,23 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
-
+    <!--背景图片-->
     <ImageView
         android:id="@+id/bing_pic_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
-
+    <!--DrawerLayout抽屉风格-->
+    <!--DrawerLayout最好为界面的根布局，官网是这样说的，否则可能会出现触摸事件被屏蔽的问题；主内容区的布局代码要放在侧滑菜单布局的前面,
+    因为 XML 顺序意味着按 z 序（层叠顺序）排序，并且抽屉式导航栏必须位于内容顶部；侧滑菜单部分的布局（这里是ListView）必须设置layout_gravity属性，
+    他表示侧滑菜单是在左边还是右边，而且如果不设置在打开关闭抽屉的时候会报错，设置了layout_gravity="start/left"的视图才会被认为是侧滑菜单。-->
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <!--SwipeRefreshLayout有下拉加载-->
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <!--ScrollView滚动-->
             <ScrollView
                 android:id="@+id/weather_layout"
                 android:layout_width="match_parent"
@@ -49,7 +52,7 @@
             </ScrollView>
 
         </android.support.v4.widget.SwipeRefreshLayout>
-
+        <!--android:layout_gravity="start"必须设置-->
         <fragment
             android:id="@+id/choose_area_fragment"
             android:name="com.coolweather.android.ChooseAreaFragment"

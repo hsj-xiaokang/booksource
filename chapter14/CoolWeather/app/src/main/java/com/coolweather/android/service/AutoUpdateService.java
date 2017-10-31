@@ -31,6 +31,13 @@ public class AutoUpdateService extends Service {
         return null;
     }
 
+    /**
+     * 非绑定启动
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         updateWeather();
@@ -40,7 +47,9 @@ public class AutoUpdateService extends Service {
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this, AutoUpdateService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
+        //取消，不断的添加反复添加
         manager.cancel(pi);
+        //反复的添加
         manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
         return super.onStartCommand(intent, flags, startId);
     }

@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:fitsSystemWindows="true">
-
+   <!--由于使用了没有ActionBar的风格，所有没有ActionBar，android:layout_height="?attr/actionBarSize"设置高度就等于ActionBar的高度-->
+    <!--引用Google提供的背景色 android:background="?attr/colorPrimary"-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

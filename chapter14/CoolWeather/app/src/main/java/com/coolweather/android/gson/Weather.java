@@ -16,6 +16,9 @@ public class Weather {
 
     public Suggestion suggestion;
 
+    /**
+     * daily_forecast对应的实体字段是forecastList
+     */
     @SerializedName("daily_forecast")
     public List<Forecast> forecastList;
 

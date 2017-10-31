@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--由于使用了没有ActionBar的风格，所有没有ActionBar，android:layout_height="?attr/actionBarSize"设置高度就等于ActionBar的高度-->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
