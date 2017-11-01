@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         contentWebView.getSettings().setJavaScriptEnabled(true);
         // 从assets目录下面的加载html
         contentWebView.loadUrl("file:///android_asset/web.html");
+        //启用交互
         contentWebView.addJavascriptInterface(MainActivity.this,"android");
 
 
