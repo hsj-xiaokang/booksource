@@ -234,8 +234,10 @@ import android.app.PendingIntent;
 
 ************************************************
 十二 
- material design    http://blog.csdn.net/leejizhou/article/details/50479934
-http://www.androidchina.net/1381.html
+ material design   
+ http://blog.csdn.net/column/details/androiddesign.html
+ http://blog.csdn.net/leejizhou/article/details/50479934
+ http://www.androidchina.net/1381.html
 这和了下拉刷新，上拉加载 book\booksource\chapter12\MaterialTest
 ***********************************************
 
