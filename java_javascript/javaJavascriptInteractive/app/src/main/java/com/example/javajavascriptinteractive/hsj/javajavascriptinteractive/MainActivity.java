@@ -9,6 +9,9 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 
 /**
+ * 学习博客:
+ * http://blog.csdn.net/carson_ho/article/details/64904691
+ *
  * java调JavaScript名字必须：javacalljs javacalljswith
  * JavaScript调用java名字必须：startFunction
  */
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Button按钮 无参调用HTML js方法
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 无参数调用 JS的方法
