@@ -53,6 +53,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <!--侧滑菜单-->
+    <!--下面的控件放在抽屉的下面，必须设置 android:layout_gravity="start"这个属性-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"

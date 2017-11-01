@@ -1,8 +1,5 @@
 package com.example.materialtest;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -14,16 +11,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,15 +23,27 @@ import com.example.materialtest.footerView.SimpleFooterView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+/**
+ *
+ * 可以查看进阶的书籍
+ * android进阶之光
+ * android群雄传等
+ * 具体看QQ微云上面的保存地址
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    //上拉下拉加载组件
+    /**
+     * 上拉下拉加载组件
+     */
     private SwipeRecyclerView recyclerView;
-    //每一页的大小
+    /**
+     * 每一页的大小
+     */
     private int pagerSize = 10;
-    //当前页
+    /**
+     * 当前页
+     */
     private int currentPage = 1;
 
     private DrawerLayout mDrawerLayout;

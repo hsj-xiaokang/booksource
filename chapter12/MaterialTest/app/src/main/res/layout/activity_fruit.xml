@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
     <!--CollapsingToolbarLayout只能依附于AppBarLayout-->
+    <!--布局的博客http://blog.csdn.net/leejizhou/article/details/50533020-->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
