@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
  * rxjava 2.0+
  * continued support for Java 6+ & Android 2.3+
  * https://zhuanlan.zhihu.com/p/24482660?refer=dreawer
+ *
+ * 号称东半球最佳实践博客：http://blog.csdn.net/theone10211024/article/details/50435325
 
  首先声明，RxJava以观察者模式为骨架，在2.0中依然如此。
  不过此次更新中，出现了两种观察者模式：
