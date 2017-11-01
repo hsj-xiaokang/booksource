@@ -10,7 +10,11 @@
  function javacalljswith(arg){
      document.getElementById("content").innerHTML = ("<br\>"+arg);
  }
- console.log(window.android);
+
+ function javacalljswith(arg1,arg2,arg3){
+     document.getElementById("content").innerHTML = ("---"+arg1+"---"+arg2+"---"+arg3);
+ }
+  console.log(window.android);
   console.log(window);
 </script>
 </head>
@@ -21,5 +25,7 @@ HTML 内容显示 <br/>
 <input type="button"  value="点击调用java代码" onclick="window.android.startFunction()" />
 <br/>
 <input type="button"  value="点击调用java代码并传递参数" onclick="window.android.startFunction('http://blog.csdn.net/Leejizhou')"  />
+<br/>
+<input type="button"  value="点击调用java代码并传递多个参数" onclick="window.android.startFunction('http://blog.csdn.net/Leejizhou','hsj','xiaokang')"  />
 </body>
 </html>

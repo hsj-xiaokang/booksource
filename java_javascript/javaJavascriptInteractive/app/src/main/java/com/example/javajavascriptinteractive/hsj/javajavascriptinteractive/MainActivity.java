@@ -8,6 +8,10 @@ import android.webkit.WebView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
+/**
+ * java调JavaScript名字必须：javacalljs javacalljswith
+ * JavaScript调用java名字必须：startFunction
+ */
 public class MainActivity extends AppCompatActivity {
 
     private WebView contentWebView;
@@ -42,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 contentWebView.loadUrl("javascript:javacalljswith(" + "'http://blog.csdn.net/Leejizhou'" + ")");
             }
         });
+        //Button按钮 有参调用HTML js方法 多个参数
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 传递参数调用JS的方法
+                contentWebView.loadUrl("javascript:javacalljswith(" + "'http://blog.csdn.net/Leejizhou','123',456" + ")");
+            }
+        });
 
 
     }
@@ -67,6 +79,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 new AlertDialog.Builder(MainActivity.this).setMessage(text).show();
+
+            }
+        });
+
+
+    }
+
+    @JavascriptInterface
+    public void startFunction(final String text1,final String text2,final String text3){
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                new AlertDialog.Builder(MainActivity.this).setMessage("param1"+text1+" param2"+text2+" param3"+text3).show();
 
             }
         });
