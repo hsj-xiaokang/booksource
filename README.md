@@ -300,7 +300,14 @@ http://blog.csdn.net/oqihaogongyuan/article/details/50944755
 https://www.cnblogs.com/liqw/p/4266209.html
 https://www.cnblogs.com/zhaoyanjun/p/5842601.html
 ***********************************************
-			 
+	
+***********************************************
+十七
+layout布局文件相关
+http://blog.csdn.net/guolin_blog/article/details/8744943
+http://blog.csdn.net/wxx614817/article/details/50975265
+***********************************************	
+	
                                       									 
 
 *******************************************************************************************************
