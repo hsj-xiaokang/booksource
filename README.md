@@ -275,6 +275,14 @@ http://blog.csdn.net/mynameishuangshuai/article/details/51491074
 碎片
 http://blog.csdn.net/guolin_blog/article/details/8881711
 ***********************************************
+
+***********************************************
+十六
+goson
+http://blog.csdn.net/oqihaogongyuan/article/details/50944755
+https://www.cnblogs.com/liqw/p/4266209.html
+https://www.cnblogs.com/zhaoyanjun/p/5842601.html
+***********************************************
 			 
                                       									 
 
