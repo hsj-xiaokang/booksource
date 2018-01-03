@@ -319,6 +319,7 @@ https://www.jianshu.com/p/4fac6304d872
 ```
 网络框架retrofit：
 http://blog.csdn.net/carson_ho/article/details/73732076
+https://www.jianshu.com/p/308f3c54abdd
 https://www.jianshu.com/p/dfaf8e51f720
 ```
 	
