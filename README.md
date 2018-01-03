@@ -274,6 +274,7 @@ http://blog.csdn.net/mynameishuangshuai/article/details/51491074
 十五
 碎片
 http://blog.csdn.net/guolin_blog/article/details/8881711
+http://blog.csdn.net/wxx614817/article/details/50975265
 获取屏幕宽高，动态碎片
 ```
  @Override  
