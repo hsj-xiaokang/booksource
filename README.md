@@ -274,6 +274,22 @@ http://blog.csdn.net/mynameishuangshuai/article/details/51491074
 十五
 碎片
 http://blog.csdn.net/guolin_blog/article/details/8881711
+获取屏幕宽高，动态碎片
+```
+ @Override  
+    protected void onCreate(Bundle savedInstanceState) {  
+        super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_main);  
+        Display display = getWindowManager().getDefaultDisplay();  
+        if (display.getWidth() > display.getHeight()) {  
+            Fragment1 fragment1 = new Fragment1();  
+            getFragmentManager().beginTransaction().replace(R.id.main_layout, fragment1).commit();  
+        } else {  
+            Fragment2 fragment2 = new Fragment2();  
+            getFragmentManager().beginTransaction().replace(R.id.main_layout, fragment2).commit();  
+        }  
+    } 
+```
 ***********************************************
 
 ***********************************************
