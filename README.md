@@ -313,6 +313,7 @@ http://blog.csdn.net/wxx614817/article/details/50975265
 十八
 android五大布局
 https://www.cnblogs.com/chiao/archive/2011/08/24/2152435.html
+https://www.jianshu.com/p/4fac6304d872
 ***********************************************	
 	
                                       									 
