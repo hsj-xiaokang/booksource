@@ -262,6 +262,19 @@ application android:resizebleActivity="false"
 横屏竖屏portrait landscape：
 activity android:screenOrientation="portrait" 
 ***********************************************
+
+***********************************************
+十四
+activity启动模式
+http://blog.csdn.net/mynameishuangshuai/article/details/51491074
+***********************************************
+
+
+***********************************************
+十五
+碎片
+http://blog.csdn.net/guolin_blog/article/details/8881711
+***********************************************
 			 
                                       									 
 
