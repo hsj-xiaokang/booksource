@@ -368,6 +368,11 @@ http://www.jcodecraeer.com/a/basictutorial/2016/0812/6533.html
 http://blog.csdn.net/sshhbb/article/details/7219838/
 http://blog.csdn.net/geek_geek/article/details/47669259
 ```
+
+```
+android功能库
+https://www.jianshu.com/p/9c5c97762bfe
+```
                                       									 
 
 *******************************************************************************************************
