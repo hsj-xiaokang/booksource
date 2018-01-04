@@ -351,6 +351,8 @@ http://blog.csdn.net/jkkjklmn/article/details/7349517
 ```
 自定义属性
 http://blog.csdn.net/eyu8874521/article/details/8552534
+自定义控件
+https://www.cnblogs.com/whoislcj/p/5714760.html
 ```
 
 ```
