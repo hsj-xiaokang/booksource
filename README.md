@@ -352,7 +352,23 @@ http://blog.csdn.net/jkkjklmn/article/details/7349517
 自定义属性
 http://blog.csdn.net/eyu8874521/article/details/8552534
 ```
-                                      									 
+
+```
+android selector和shape====【drawable】---动态样式
+http://blog.csdn.net/qq_20785431/article/details/50198315
+http://blog.csdn.net/wenwen091100304/article/details/49667293
+https://www.cnblogs.com/kest/p/5153357.html
+```
+
+```
+android 样式和主题====【values】---静态样式
+https://www.cnblogs.com/wuyudong/p/5863285.html
+http://www.jianshu.com/p/5b6b2b511e85
+http://www.jcodecraeer.com/a/basictutorial/2016/0812/6533.html
+http://blog.csdn.net/sshhbb/article/details/7219838/
+http://blog.csdn.net/geek_geek/article/details/47669259
+```
+                                      									 
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
