@@ -332,6 +332,16 @@ https://www.jianshu.com/p/e740196225a4
 四大activity模式
 http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0520/2897.html
 ```
+
+```
+V21
+ 在开发中遇到这个问题，把xml文件放在drawable-v21文件夹下，在Android版本API 22中，可以正常运行，但是在API19中则报出xml布局文件错误的问题，经过一番排查，才知道是手机版本兼容问题，drawable-v21文件夹是v7包用于存放xml文件，但是在API 21以上才可使用，否则会报出xml布局文件的错误，要在API 21以下使用drawable中的xml文件，还是要把 其放在drawable中。
+ 
+ 
+values-v19/style.xml—对应api19+手机型号在此调用。 
+values-v21/style.xml—对应api21+手机型号在此调用。 
+values/style.xml—对应values-v19和values-v21的style.xml中没有对应主题时默认在此调用。
+```
 	
                                       									 
 
