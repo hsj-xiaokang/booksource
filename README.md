@@ -384,7 +384,11 @@ https://www.jianshu.com/p/776cc6329fff
 android 学习
 https://www.jianshu.com/p/8e73248d52f5
 ```
-                                      									 
+```
+仿微信底部tab
+Android Design新控件之TabLaout（二），仿微信实现App底部Tab布局
+https://www.jianshu.com/p/ae8b3e4514c6
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
