@@ -31,7 +31,7 @@ booksource\chapter3\UIWidgetTest
 																	
 ****************
 二：自定义UI组件和利用自定义属性attrs.xml，其中实现了自定UI attrs功能的的仿支付宝和QQ右上角的三个点点的pupmenu效果。
-【booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs 】
+【booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs 】【chapter3\UICustomViews】
 参考:http://blog.csdn.net/brokge/article/details/9713041/
 http://www.cnblogs.com/xch-yang/p/6017685.html
 http://www.cnblogs.com/whoislcj/p/5714760.html
