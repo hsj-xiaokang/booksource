@@ -342,6 +342,11 @@ values-v19/style.xml—对应api19+手机型号在此调用。
 values-v21/style.xml—对应api21+手机型号在此调用。 
 values/style.xml—对应values-v19和values-v21的style.xml中没有对应主题时默认在此调用。
 ```
+
+```
+android:configChanges
+http://blog.csdn.net/jkkjklmn/article/details/7349517
+```
 	
                                       									 
 
