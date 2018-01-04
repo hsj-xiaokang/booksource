@@ -347,7 +347,11 @@ values/style.xml—对应values-v19和values-v21的style.xml中没有对应主�
 android:configChanges
 http://blog.csdn.net/jkkjklmn/article/details/7349517
 ```
-	
+
+```
+自定义属性
+http://blog.csdn.net/eyu8874521/article/details/8552534
+```
                                       									 
 
 *******************************************************************************************************
