@@ -390,6 +390,11 @@ Android Design新控件之TabLaout（二），仿微信实现App底部Tab布局
 https://www.jianshu.com/p/ae8b3e4514c6
 ```
 
+```
+Android 仿美团顶部滑动菜单
+https://www.jianshu.com/p/885a6922cdb0
+```
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
