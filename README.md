@@ -327,6 +327,11 @@ https://www.jianshu.com/p/dfaf8e51f720
 gson教程
 https://www.jianshu.com/p/e740196225a4
 ```
+
+```
+四大activity模式
+http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0520/2897.html
+```
 	
                                       									 
 
