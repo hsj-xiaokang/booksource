@@ -402,6 +402,9 @@ https://www.jianshu.com/p/ae8b3e4514c6
 Android 仿美团顶部滑动菜单
 https://www.jianshu.com/p/885a6922cdb0
 ```
+```
+compile 'com.google.guava:guava:22.0-android'
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
