@@ -31,7 +31,7 @@ booksource\chapter3\UIWidgetTest
 																	
 ****************
 二：自定义UI组件和利用自定义属性attrs.xml，其中实现了自定UI attrs功能的的仿支付宝和QQ右上角的三个点点的pupmenu效果。
-【booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs 】
+【booksource\chapter3\UIWidgetTest实现了自己定义UI Attrs 】【chapter3\UICustomViews】
 参考:http://blog.csdn.net/brokge/article/details/9713041/
 http://www.cnblogs.com/xch-yang/p/6017685.html
 http://www.cnblogs.com/whoislcj/p/5714760.html
@@ -315,8 +315,93 @@ android五大布局
 https://www.cnblogs.com/chiao/archive/2011/08/24/2152435.html
 https://www.jianshu.com/p/4fac6304d872
 ***********************************************	
-	
-                                      									 
+
+```
+网络框架retrofit：
+http://blog.csdn.net/carson_ho/article/details/73732076
+https://www.jianshu.com/p/308f3c54abdd
+https://www.jianshu.com/p/dfaf8e51f720
+```
+
+```
+gson教程
+https://www.jianshu.com/p/e740196225a4
+```
+
+```
+四大activity模式
+http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0520/2897.html
+```
+
+```
+V21
+ 在开发中遇到这个问题，把xml文件放在drawable-v21文件夹下，在Android版本API 22中，可以正常运行，但是在API19中则报出xml布局文件错误的问题，经过一番排查，才知道是手机版本兼容问题，drawable-v21文件夹是v7包用于存放xml文件，但是在API 21以上才可使用，否则会报出xml布局文件的错误，要在API 21以下使用drawable中的xml文件，还是要把 其放在drawable中。
+ 
+ 
+values-v19/style.xml—对应api19+手机型号在此调用。 
+values-v21/style.xml—对应api21+手机型号在此调用。 
+values/style.xml—对应values-v19和values-v21的style.xml中没有对应主题时默认在此调用。
+```
+
+```
+android:configChanges
+http://blog.csdn.net/jkkjklmn/article/details/7349517
+```
+
+```
+自定义属性
+http://blog.csdn.net/eyu8874521/article/details/8552534
+自定义控件
+https://www.cnblogs.com/whoislcj/p/5714760.html
+```
+
+```
+android selector和shape====【drawable】---动态样式
+http://blog.csdn.net/qq_20785431/article/details/50198315
+http://blog.csdn.net/wenwen091100304/article/details/49667293
+https://www.cnblogs.com/kest/p/5153357.html
+```
+
+```
+android 样式和主题====【values】---静态样式
+https://www.cnblogs.com/wuyudong/p/5863285.html
+http://www.jianshu.com/p/5b6b2b511e85
+http://www.jcodecraeer.com/a/basictutorial/2016/0812/6533.html
+http://blog.csdn.net/sshhbb/article/details/7219838/
+http://blog.csdn.net/geek_geek/article/details/47669259
+```
+
+```
+layer_list
+http://blog.csdn.net/brokge/article/details/9713041/
+```
+
+```
+android功能库
+简书：https://www.jianshu.com
+https://www.jianshu.com/p/3baddcf948af
+https://www.jianshu.com/p/9c5c97762bfe
+https://www.jianshu.com/p/634f18d74ab0
+```
+```
+material
+https://www.jianshu.com/p/776cc6329fff
+```
+
+```
+android 学习
+https://www.jianshu.com/p/8e73248d52f5
+```
+```
+仿微信底部tab
+Android Design新控件之TabLaout（二），仿微信实现App底部Tab布局
+https://www.jianshu.com/p/ae8b3e4514c6
+```
+
+```
+Android 仿美团顶部滑动菜单
+https://www.jianshu.com/p/885a6922cdb0
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
