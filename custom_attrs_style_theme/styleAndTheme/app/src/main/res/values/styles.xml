@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base application theme. eg:Theme.AppCompat.Light.DarkActionBar-->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryMyTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkMyTheme</item>
+        <item name="colorAccent">@color/colorAccentMyTheme</item>
+    </style>
+
+    <!--自定义的样式-->
+    <style name="MyBox">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">#fa8752</item>
+    </style>
+
+    <!--影式继承-->
+    <style name="MyBox.TEAL">
+        <item name="android:background">#afa</item>
+    </style>
+    <style name="MyBox.CYAN">
+        <item name="android:background">#abf</item>
+    </style>
+
+    <!--显示继承-->
+    <style name="TealBox" parent="MyBox">
+        <item name="android:background">#009688</item>
+    </style>
+
+
+    <!--主题:见name="AppTheme";运用在application或者activity上面-->
+
+</resources>

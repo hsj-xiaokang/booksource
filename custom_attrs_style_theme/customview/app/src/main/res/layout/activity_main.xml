@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:lee="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:orientation="vertical">
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_1"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="0dp"
+            lee:right_button_drawable="@mipmap/titlebar_add_icon"
+            lee:title_background_color="@color/green"
+            lee:title_text="标题1" />
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            lee:right_button_visible="false"
+            lee:title_background_color="@color/green"
+            lee:title_text="标题2" />
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_3"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            lee:left_button_text="左边"
+            lee:right_button_text="右边"
+            lee:title_background_color="@color/red"
+            lee:title_text="标题3" />
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_4"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            lee:left_button_text="左边"
+            lee:right_button_drawable="@mipmap/titlebar_add_icon"
+            lee:title_background_color="@color/red"
+            lee:title_text="标题4" />
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_5"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            lee:left_button_text="左边"
+            lee:left_button_text_color="@color/red"
+            lee:right_button_drawable="@mipmap/titlebar_add_icon"
+            lee:title_background_color="@color/blue"
+            lee:title_text="标题5" />
+
+        <hsj.com.myapplication.view.CustomTitleBar
+            android:id="@+id/customview_6"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            lee:left_button_text="左边"
+            lee:left_button_text_color="@color/red"
+            lee:right_button_drawable="@mipmap/titlebar_add_icon"
+            lee:title_background_color="@color/blue"
+            lee:title_text="标题6"
+            lee:title_text_color="@color/black" />
+
+    </LinearLayout>
+

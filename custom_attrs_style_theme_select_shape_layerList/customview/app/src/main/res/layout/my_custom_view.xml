@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--自己定义控件UI，注意：这里为何要使用merge标签，自定义组合控件时会继承RelativeLayout、LinearLayout等控件，这样导致布局的层级无形中增加了一层-->
+    <Button
+        android:id="@+id/title_bar_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:background="@null"
+        android:minHeight="15dp"
+        android:minWidth="20dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/title_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:singleLine="true"
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/title_bar_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="7dp"
+        android:background="@null"
+        android:minHeight="15dp"
+        android:minWidth="20dp"
+        android:textSize="14sp"
+        />
+
+
+
+</merge>

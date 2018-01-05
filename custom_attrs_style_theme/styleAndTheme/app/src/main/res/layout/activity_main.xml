@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="hsj.com.styleandtheme.MainActivity">
+
+    <View
+        android:id="@+id/box1"
+        style="@style/MyBox" />
+
+    <View
+        android:id="@+id/box2"
+        style="@style/MyBox.CYAN" />
+
+    <View
+        android:id="@+id/box3"
+        style="@style/MyBox.TEAL" />
+
+    <View
+        android:id="@+id/box4"
+        style="@style/TealBox" />
+
+    <Button android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AppTheme"
+        android:id="@+id/app_theme_button"
+        style="@style/AppTheme" />
+
+    <Button android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="borderless"
+        android:id="@+id/borderless_button"
+        style="@style/Widget.AppCompat.Button.Borderless" />
+
+    <Button android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="colored"
+        android:id="@+id/colored_button"
+        style="@style/Widget.AppCompat.Button.Colored" />
+
+</LinearLayout>

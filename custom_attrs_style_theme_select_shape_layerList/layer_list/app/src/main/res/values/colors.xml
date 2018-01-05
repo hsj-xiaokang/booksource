@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="gyGrey">#E5E5E5</color>
+    <color name="gyGreen">#CAFF70</color>
+    <color name="gyDeepGreen">#9AFF9A</color>
+    <color name="green">#00FF33</color>
+    <color name="red">#FF0000</color>
+    <color name="blue">#0033FF</color>
+    <color name="black">#000000</color>
+</resources>
