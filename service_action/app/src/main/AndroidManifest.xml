@@ -26,6 +26,10 @@
         <service android:name=".service.MyService_Front"></service>
 
         <!--http://blog.csdn.net/guolin_blog/article/details/9797169 另外的app程序调用action方式-->
+        <!--加：和不加：还是有区别。加：表示会创建一个私有的进程；-->
+        <!--直接小写字母开头表示全局进程。-->
+        <!--http://developer.android.com/guide/topics/manifest/service-element.html-->
+        <!--If the name assigned to this attribute begins with a colon (':'), a new process, private to the application, is created when it's needed and the service runs in that process. If the process name begins with a lowercase character, the service will run in a global process of that name, provided that it has permission to do so. This allows components in different applications to share a process, reducing resource usage.-->
         <service android:name=".service.MyService_Remote" android:process=":remote">
             <intent-filter>
                 <action android:name="hsj.com.service_action.MyAIDLService"/>
