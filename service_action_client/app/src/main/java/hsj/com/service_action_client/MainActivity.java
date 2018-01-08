@@ -13,6 +13,10 @@ import android.widget.Button;
 
 import hsj.com.service_action.MyAIDLService;
 
+/**
+ * 服务端
+ * service_action
+ */
 public class MainActivity extends AppCompatActivity {
 
 
