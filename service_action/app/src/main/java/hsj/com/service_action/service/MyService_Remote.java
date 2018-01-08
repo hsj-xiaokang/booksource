@@ -4,8 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import hsj.com.service_action.MyAIDLService;
 
 /**
  * Created by hsj on 2018/1/5.
@@ -15,21 +18,26 @@ import android.util.Log;
  *
  * AIDL（Android Interface Definition Language）是Android接口定义语言的意思，
  * 它可以用于让某个Service与多个应用程序组件之间进行跨进程通信，从而可以实现多个应用程序共享同一个Service的功能。
+ *
+ *
+ * build->make project 生成aidl的java代码
+ *
+ * blog:http://m.blog.csdn.net/u011240877/article/details/72765136
  */
 
 public class MyService_Remote extends Service{
     private static final String TAG = "MyService_Remote";
-    private MyService_Remote.MyBinder_binder_remote mbd = new MyService_Remote.MyBinder_binder_remote();
+//    private MyService_Remote.MyBinder_binder_remote mbd = new MyService_Remote.MyBinder_binder_remote();
 
     @Override
     public void onCreate() {
         Log.i(TAG,"oncreat!");
         super.onCreate();
-        try {
+        /*try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
@@ -41,7 +49,8 @@ public class MyService_Remote extends Service{
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return mbd;
+//        return mbd;
+        return mBinder;
     }
 
     /**
@@ -58,10 +67,27 @@ public class MyService_Remote extends Service{
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public class MyBinder_binder_remote extends Binder {
+    /*public class MyBinder_binder_remote extends Binder {
         public void startDownload() {
             Log.d("TAG", "startDownload() executed");
             // 执行具体的下载任务
         }
-    }
+    }*/
+
+
+    MyAIDLService.Stub mBinder = new MyAIDLService.Stub() {
+
+        @Override
+        public String toUpperCase(String str) throws RemoteException {
+            if (str != null) {
+                return str.toUpperCase();
+            }
+            return null;
+        }
+
+        @Override
+        public int plus(int a, int b) throws RemoteException {
+            return a + b;
+        }
+    };
 }
