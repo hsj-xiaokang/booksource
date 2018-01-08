@@ -17,4 +17,5 @@
         android:text="Bind Service"
         android:textAllCaps="false"
         />
+
 </RelativeLayout>
