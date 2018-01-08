@@ -25,7 +25,13 @@
 
         <service android:name=".service.MyService_Front"></service>
 
-        <service android:name=".service.MyService_Remote" android:process=":remote"></service>
+        <!--http://blog.csdn.net/guolin_blog/article/details/9797169 另外的app程序调用action方式-->
+        <service android:name=".service.MyService_Remote" android:process=":remote">
+            <intent-filter>
+                <action android:name="hsj.com.service_action.MyAIDLService"/>
+                <!--<category android:name="hsj.com.service_action.MyAIDLService.category"></category>-->
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

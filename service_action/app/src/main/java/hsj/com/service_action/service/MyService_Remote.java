@@ -23,6 +23,8 @@ import hsj.com.service_action.MyAIDLService;
  * build->make project 生成aidl的java代码
  *
  * blog:http://m.blog.csdn.net/u011240877/article/details/72765136
+ *
+ * ************************aidl测试，这个相当于的service端，准备好给客户端调用该service，新建一个client调用该service，项目是service_action_remote_client***********************
  */
 
 public class MyService_Remote extends Service{
