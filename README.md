@@ -413,6 +413,7 @@ Android强大的图表开源——MPAndroidChart
 hellocharts-android开源图表库（效果非常好）
 http://blog.csdn.net/zhangphil/article/details/47656521
 http://blog.csdn.net/qq_37293612/article/details/54959726
+http://blog.csdn.net/u010151514/article/details/52062052
 ```
 
 *******************************************************************************************************
