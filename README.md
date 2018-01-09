@@ -504,6 +504,10 @@ https://www.jianshu.com/p/dd44981c038e
 litePal
 https://www.jianshu.com/p/bc68e763c7a2
 ```
+```
+arrays.xml
+http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0105/2263.html
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
