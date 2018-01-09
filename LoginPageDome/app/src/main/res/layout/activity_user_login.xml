@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    android:gravity="center_horizontal|center_vertical"
+     >
+    <!--android:gravity：-->
+    <!--这个是针对控件里的元素来说的，用来控制元素在该控件里的显示位置。例如，在一个Button按钮控件中设置如下两个属性，-->
+    <!--android:gravity="left"和android:text="提交"，这时Button上的文字“提交”将会位于Button的左部。-->
+
+    <!--android:layout_gravity：-->
+    <!--这个是针对控件本身而言，用来控制该控件在包含该控件的父控件中的位置。同样，当我们在Button按钮控件中设置android:layout_gravity="left"属性时，表示该Button按钮将位于界面的左部。-->
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="用户登录"
+         android:textAllCaps="false"
+         android:textSize="16dp"
+         android:layout_marginBottom="5dp"/>
+    <!--android:background="@color/loginInput"-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/shape_wihte_frame"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:paddingLeft="20dp"
+            android:text="手机号"
+            android:textSize="13sp" />
+        <View
+            android:id="@+id/view1"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@android:color/darker_gray" />
+        <!--android:background="@drawable/transparent"-->
+        <EditText
+            android:id="@+id/phonenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:ems="19"
+            android:layout_marginLeft="5dp"
+            android:hint="请输入手机号"
+            android:inputType="phone"
+            android:padding="1dp"
+            android:textSize="15sp" >
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/del_phonenumber"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/text_del"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <!--android:background="@color/loginInput"-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/shape_wihte_frame"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:paddingLeft="20dp"
+            android:text="密码"
+            android:textSize="13sp" />
+        <View
+            android:id="@+id/view2"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@android:color/darker_gray" />
+        <!--android:background="@drawable/transparent"-->
+        <!--android:ems = "10" 的含义 :-->
+        <!--指的是将对应的控件宽度设为10个字符的宽度。-->
+        <!--注意，当 android:layout_width="match_parent" 时该属性不会生效-->
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:ems="19"
+            android:layout_marginLeft="5dp"
+            android:hint="请输入密码"
+            android:inputType="phone"
+            android:padding="1dp"
+            android:textSize="15sp" >
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/del_password"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/text_del"
+            android:visibility="invisible" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/shape_wihte_frame"
+        android:text="登录"/>
+</LinearLayout>
