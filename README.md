@@ -420,6 +420,13 @@ http://blog.csdn.net/u010151514/article/details/52062052
 findViewById--butterknife
 --原理-不是注解反射-https://www.jianshu.com/p/0f3f4f7ca505#
 apt-https://joyrun.github.io/2016/07/19/AptHelloWorld/
+APT大概就是你声明的注解的生命周期为CLASS,然后继承AbstractProcessor类。继承这个类后，在编译的时候，编译器会扫描所有带有你要处理的注解的类，然后再调用AbstractProcessor的process方法，对注解进行处理，那么我们就可以在处理的时候，动态生成绑定事件或者控件的java代码，然后在运行的时候，直接调用bind方法完成绑定。
+其实这种方式的好处是我们不用再一遍一遍地写findViewById和onClick了，这个框架在编译的时候帮我们自动生成了这些代码，然后在运行的时候调用就行了。
+
+作者：尸情化异
+链接：https://www.jianshu.com/p/0f3f4f7ca505#
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 https://www.jianshu.com/p/9ad21e548b69
 https://www.cnblogs.com/zhaoyanjun/p/6016341.html
