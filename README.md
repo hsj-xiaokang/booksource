@@ -437,6 +437,55 @@ https://www.jianshu.com/p/5dead31a84f6--8.x版本
 ButterKnife结合RecyclerView.Adapter一起使用
 http://blog.csdn.net/zhuhai__yizhi/article/details/50777067
 ```
+```
+ButterKnife数组
+@BindArray() : 绑定string里面array数组
+<resources>
+    <string name="app_name">WiFi管家</string>
+    
+    <string-array name="city">
+        <item>厦门市</item>
+        <item>福州市</item>
+        <item>泉州市</item>
+        <item>漳州市</item>
+        <item>龙岩市</item>
+    </string-array>
+    
+</resources>
+
+
+
+package com.zyj.wifi;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+
+import butterknife.BindArray;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class ButterknifeActivity extends AppCompatActivity {
+
+    @BindView( R.id.button1 ) //绑定button 控件
+    public Button button1 ;
+
+    @BindArray(R.array.city )  //绑定string里面array数组
+    String [] citys ;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_butterknife);
+
+        //绑定activity
+        ButterKnife.bind( this ) ;
+
+        button1.setText( citys[0] );
+    }
+}
+
+```
 
 ```
 android横竖屏切换
