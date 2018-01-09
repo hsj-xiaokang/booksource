@@ -491,6 +491,10 @@ public class ButterknifeActivity extends AppCompatActivity {
 android横竖屏切换
 https://www.jianshu.com/p/d9281857c69a
 ```
+```
+android日历控件
+https://www.jianshu.com/p/8396a4d39c01
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
