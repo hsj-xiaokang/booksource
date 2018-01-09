@@ -417,8 +417,9 @@ http://blog.csdn.net/u010151514/article/details/52062052
 ```
 
 ```
-findViewById
+findViewById--butterknife
 https://www.jianshu.com/p/9ad21e548b69
+https://www.cnblogs.com/zhaoyanjun/p/6016341.html
 ```
 ```
 android横竖屏切换
