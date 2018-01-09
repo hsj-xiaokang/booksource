@@ -432,6 +432,12 @@ https://www.jianshu.com/p/9ad21e548b69
 https://www.cnblogs.com/zhaoyanjun/p/6016341.html
 https://www.jianshu.com/p/5dead31a84f6--8.x版本
 ```
+
+```
+ButterKnife结合RecyclerView.Adapter一起使用
+http://blog.csdn.net/zhuhai__yizhi/article/details/50777067
+```
+
 ```
 android横竖屏切换
 https://www.jianshu.com/p/d9281857c69a
