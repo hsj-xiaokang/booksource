@@ -420,6 +420,10 @@ http://blog.csdn.net/u010151514/article/details/52062052
 findViewById
 https://www.jianshu.com/p/9ad21e548b69
 ```
+```
+android横竖屏切换
+https://www.jianshu.com/p/d9281857c69a
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
