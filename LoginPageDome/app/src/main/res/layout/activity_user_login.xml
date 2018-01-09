@@ -106,7 +106,7 @@
             android:background="@android:color/transparent"
             android:ems="19"
             android:layout_marginLeft="5dp"
-            android:hint="请输入密码"
+            android:hint="请输入密码hsj"
             android:inputType="phone"
             android:padding="1dp"
             android:textSize="15sp" >

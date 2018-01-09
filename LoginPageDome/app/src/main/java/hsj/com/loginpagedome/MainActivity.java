@@ -3,6 +3,8 @@ package hsj.com.loginpagedome;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.EventLogTags;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import hsj.com.loginpagedome.tools.ObjectUtils;
  * blog:http://blog.csdn.net/androidmsky/article/details/49870823
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "MainActivity";
 
     EditText e1, e2;
     ImageView m1, m2;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //go home activity TODO
             goHome();
         }
-//        init();
+        init();
     }
 
     private void init() {
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         e2 = (EditText) findViewById(R.id.password);
         m1 = (ImageView) findViewById(R.id.del_phonenumber);
         m2 = (ImageView) findViewById(R.id.del_password);
+        Log.i(TAG,m1.toString());
         // 添加清楚监听器大气
         EditTextClearTools.addclerListener(e1, m1);
         EditTextClearTools.addclerListener(e2, m2);
