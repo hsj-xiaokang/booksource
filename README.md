@@ -407,6 +407,14 @@ https://www.jianshu.com/p/885a6922cdb0
 compile 'com.google.guava:guava:22.0-android'
 ```
 
+```
+报表
+Android强大的图表开源——MPAndroidChart
+hellocharts-android开源图表库（效果非常好）
+http://blog.csdn.net/zhangphil/article/details/47656521
+http://blog.csdn.net/qq_37293612/article/details/54959726
+```
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
