@@ -416,6 +416,11 @@ http://blog.csdn.net/qq_37293612/article/details/54959726
 http://blog.csdn.net/u010151514/article/details/52062052
 ```
 
+```
+findViewById
+https://www.jianshu.com/p/9ad21e548b69
+```
+
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
