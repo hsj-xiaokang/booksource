@@ -423,7 +423,7 @@ apt-https://joyrun.github.io/2016/07/19/AptHelloWorld/
 
 https://www.jianshu.com/p/9ad21e548b69
 https://www.cnblogs.com/zhaoyanjun/p/6016341.html
-https://www.jianshu.com/p/5dead31a84f6
+https://www.jianshu.com/p/5dead31a84f6--8.x版本
 ```
 ```
 android横竖屏切换
