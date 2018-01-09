@@ -382,6 +382,7 @@ android功能库
 https://www.jianshu.com/p/3baddcf948af
 https://www.jianshu.com/p/9c5c97762bfe
 https://www.jianshu.com/p/634f18d74ab0
+https://www.jianshu.com/p/da1ca645b95c
 ```
 ```
 material
@@ -404,6 +405,15 @@ https://www.jianshu.com/p/885a6922cdb0
 ```
 ```
 compile 'com.google.guava:guava:22.0-android'
+```
+
+```
+报表
+Android强大的图表开源——MPAndroidChart
+hellocharts-android开源图表库（效果非常好）
+http://blog.csdn.net/zhangphil/article/details/47656521
+http://blog.csdn.net/qq_37293612/article/details/54959726
+http://blog.csdn.net/u010151514/article/details/52062052
 ```
 
 *******************************************************************************************************
