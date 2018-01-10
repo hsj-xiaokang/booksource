@@ -522,6 +522,10 @@ http://blog.csdn.net/seu_calvin/article/details/52354964
 android-apt(javac) VS anotationProcessor(javac jack)
 http://blog.csdn.net/asce1885/article/details/52878076
 ```
+```
+android控件
+https://www.jianshu.com/p/ca5d3e2a6ce8
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
