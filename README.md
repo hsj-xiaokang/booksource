@@ -518,7 +518,10 @@ http://blog.csdn.net/lmj623565791/article/details/49883661
  Android开发——JVM、Dalvik以及ART的区别
 http://blog.csdn.net/seu_calvin/article/details/52354964
 ```
-
+```
+android-apt VS anotationProcessor
+http://blog.csdn.net/asce1885/article/details/52878076
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
