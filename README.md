@@ -519,7 +519,7 @@ http://blog.csdn.net/lmj623565791/article/details/49883661
 http://blog.csdn.net/seu_calvin/article/details/52354964
 ```
 ```
-android-apt VS anotationProcessor
+android-apt(javac) VS anotationProcessor(javac jack)
 http://blog.csdn.net/asce1885/article/details/52878076
 ```
 *******************************************************************************************************
