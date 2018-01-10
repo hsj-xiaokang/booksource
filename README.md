@@ -495,6 +495,7 @@ https://www.jianshu.com/p/d9281857c69a
 android日历控件
 https://www.jianshu.com/p/8396a4d39c01
 https://www.jianshu.com/p/a2f102c728ce
+http://blog.csdn.net/zhaozhuzi/article/details/70598382
 ```
 ```
 ios风格的actionsheet 时间选择
@@ -508,7 +509,29 @@ https://www.jianshu.com/p/bc68e763c7a2
 arrays.xml
 http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0105/2263.html
 ```
+```
+热修复技术
+https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&mid=400118620&idx=1&sn=b4fdd5055731290eef12ad0d17f39d4a&scene=1&srcid=1106Imu9ZgwybID13e7y2nEi#wechat_redirect
+http://blog.csdn.net/lmj623565791/article/details/49883661
+```
+```
+ Android开发——JVM、Dalvik以及ART的区别
+http://blog.csdn.net/seu_calvin/article/details/52354964
+```
+```
+android-apt(javac) VS anotationProcessor(javac jack)
+http://blog.csdn.net/asce1885/article/details/52878076
+```
+```
+android控件
+https://www.jianshu.com/p/ca5d3e2a6ce8
+```
 
+```
+本地项目依赖
+compile project(':3Dtagcloudlib')
+http://blog.csdn.net/it_talk/article/details/51144463
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
