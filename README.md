@@ -509,6 +509,11 @@ https://www.jianshu.com/p/bc68e763c7a2
 arrays.xml
 http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0105/2263.html
 ```
+```
+热修复技术
+https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&mid=400118620&idx=1&sn=b4fdd5055731290eef12ad0d17f39d4a&scene=1&srcid=1106Imu9ZgwybID13e7y2nEi#wechat_redirect
+http://blog.csdn.net/lmj623565791/article/details/49883661
+```
 
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
