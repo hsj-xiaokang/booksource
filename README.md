@@ -526,6 +526,12 @@ http://blog.csdn.net/asce1885/article/details/52878076
 android控件
 https://www.jianshu.com/p/ca5d3e2a6ce8
 ```
+
+```
+本地项目依赖
+compile project(':3Dtagcloudlib')
+http://blog.csdn.net/it_talk/article/details/51144463
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
