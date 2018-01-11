@@ -13,6 +13,11 @@
 
 本人学习过程中添加自己的理解的注释和一些功能的补充（使用到某些大神的github代码我都注明仓库地址，没有注明的请谅解）
 
+```
+jcenter太慢
+http://blog.csdn.net/linglingchenchen/article/details/62236723
+```
+
 
 ********************
 零.自定义样式
