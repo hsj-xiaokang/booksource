@@ -555,6 +555,11 @@ http://blog.csdn.net/it_talk/article/details/51144463
     //没有使用特殊Header，可以不加这行
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
 ```
+```
+红色角标
+http://blog.csdn.net/zhangphil/article/details/43702953
+http://blog.csdn.net/zhangphil/article/details/43667727
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
