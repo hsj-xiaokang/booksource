@@ -24,6 +24,24 @@ jcenter(){ url 'http://jcenter.bintray.com/'}
 零.自定义样式
 booksource\chapter3\UIWidgetTest
 ********************
+```
+recyclerview  网格流式布局-高度不一样
+/**
+     * 绑定viewHolder
+     * @param holder
+     * @param position
+     */
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        ViewGroup.LayoutParams params =  holder.itemView.getLayoutParams();//得到item的LayoutParams布局参数
+        params.height = heights.get(position);//把随机的高度赋予itemView布局
+        holder.itemView.setLayoutParams(params);//把params设置给itemView布局
+
+        Fruit fruit = mFruitList.get(position);
+        holder.fruitImage.setImageResource(fruit.getImageId());
+        holder.fruitName.setText(fruit.getName());
+    }
+```
 
 
 ****************
