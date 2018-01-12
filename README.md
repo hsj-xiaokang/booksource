@@ -16,6 +16,7 @@
 ```
 jcenter太慢
 http://blog.csdn.net/linglingchenchen/article/details/62236723
+jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
 
 
