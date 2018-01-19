@@ -588,6 +588,27 @@ http://blog.csdn.net/it_talk/article/details/51144463
 http://blog.csdn.net/zhangphil/article/details/43702953
 http://blog.csdn.net/zhangphil/article/details/43667727
 ```
+
+```
+代码控制布局
+ * 代码设置layout_weight
+ * tvColu2.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, 1.0f));
+ * <p>
+ * <p>
+ * <p>
+ * 代码设置layout_gravity和gravity这两个属性
+ * TextView textview = findViewById(R.id.textview);
+ * //该布局在LinearLayout下
+ * LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+ * lp.gravity = Gravity.RIGHT;  //这才是布局文件中的Android:layout_gravity属性
+ * textview..setLayoutParams(lp);
+ * textview.setGravity(Gravity.CENTER); //这是布局文件中的Android：gravity属性
+ * <p>
+ * 代码设置orientation
+ * // android:orientation="vertical"
+ * mLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+```
 *******************************************************************************************************
 android权限：参见博客http://blog.csdn.net/hijson/article/details/53783217
 我们需要在AndroidManifest文件中声明我们所需要的权限(无论是normal permissions还是Dangerous Permission)
