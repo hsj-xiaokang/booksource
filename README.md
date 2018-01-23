@@ -27,6 +27,10 @@ AudioRecord录音 AudioTrack播放
 android.support.v7.widget.Toolbar
 ```
 
+```
+https://www.jianshu.com/p/1a792b14af3b
+```
+
 
 ********************
 零.自定义样式
