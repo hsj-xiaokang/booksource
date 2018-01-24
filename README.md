@@ -18,6 +18,27 @@ jcenter太慢
 http://blog.csdn.net/linglingchenchen/article/details/62236723
 jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
+```
+color
+今天自定义一个控件，设置背景颜色时犯难了
+
+现在就来总结一下android中的颜色值表示
+android 定义颜色color时6位或8位值的区别
+
+6位（#000000）就是RGB值
+8位（#1e000000）ARGB 头两位是透明度，00是完全透明，ff是完全不透明，后6位是RGB值,比较适中的透明度值是int color = Color.argb ( 127,  255,  0,  255 );  // 半透明的紫色
+其中第一个参数表示透明，0表示完全透明，255(ff)表示完全不透明；后三位分别代表RGB的值了。
+
+使用XML资源文件来定义颜色
+<color name=”mycolor”> #7fff00ff</color> 
+
+XML定义方法接受6位和8位两种表示法，而且开头必须是#，8位定义时前两位表示透明。
+
+
+在程序中直接控制
+setBackgroundColor(android.graphics.Color.argb(127, 255,0, 255));
+这种方法必须使用0x开头，而不是用我们常用的#。与方法3不一样，值也必须用8位表示 ，不接受6位的颜色表示。分组一下0x|ff|ff00ff，0x是代表颜色整数的标记，ff是表示透明度，ff00ff表示RGB颜色值
+```
 
 ```
 录音和播放-github-搜索
