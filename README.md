@@ -56,6 +56,30 @@ https://www.jianshu.com/p/1a792b14af3b
 https://github.com/lovetuzitong/MultiImageSelector
 ```
 
+```
+    /**textView文本自己适应控件--https://github.com/grantland/android-autofittextview**/
+    compile 'me.grantland:autofittextview:0.2.+'
+    /**仿ios -actionsheet-时间选择控件-不能缩小范围到年月--https://github.com/codbking/PickTime**/
+    compile 'com.github.codbking:PickTime:v1.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    /**仿ios -actionsheet-时间选择控件-能缩小范围到年月--https://github.com/JZXiang/TimePickerDialog**/
+    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
+	compile 'com.coldmoqiuli:banners:1.0.1'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
+    /**RecyclerView下拉刷新，上拉加载--https://github.com/yanxuwen/MyRecyclerView**/
+    compile'com.yanxuwen.MyRecyclerView:MyRecyclerview:1.5.1'
+    /**图片浏览保存-github-https://github.com/JellyCai1995/Mango**/
+    compile 'com.jelly:mango:1.1.2'
+//    ios-风格的actionsheet菜单--github-https://github.com/saiwu-bigkoo/Android-AlertView
+    compile 'com.bigkoo:alertview:1.0.3'
+//    动态权限处理-github-https://github.com/hongyangAndroid/MPermissions
+    annotationProcessor 'com.zhy:mpermission-compiler:1.0.0'
+    compile 'com.zhy:mpermission-api:1.0.0'
+    /**Android相册（支持多选）-github-https://github.com/lovetuzitong/MultiImageSelector**/
+    compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
+```
+
 
 ********************
 零.自定义样式
