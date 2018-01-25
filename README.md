@@ -49,6 +49,13 @@ setBackgroundColor(android.graphics.Color.argb(127, 255,0, 255));
 录音和播放-github-搜索
 AudioRecord录音 AudioTrack播放
 ```
+
+```
+BottomDialog 一个自定义的从底部弹出的dialog，仿照微博的分享弹框
+https://www.jianshu.com/p/c917dd73b3d5
+https://github.com/Curzibn/BottomDialog
+```
+
 ```
 android.support.v7.widget.Toolbar
 ```
