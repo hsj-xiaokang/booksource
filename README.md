@@ -18,6 +18,11 @@ jcenter太慢
 http://blog.csdn.net/linglingchenchen/article/details/62236723
 jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
+
+```
+简书搜索
+Android UI Library
+```
 ```
 color
 今天自定义一个控件，设置背景颜色时犯难了
