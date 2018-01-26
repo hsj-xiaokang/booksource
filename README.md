@@ -21,6 +21,7 @@ jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
 textview -图文-点击
 http://blog.csdn.net/baiyuliang2013/article/details/53538118
+http://blog.csdn.net/gemgaozhen/article/details/54289574
 ```
 
 ```
