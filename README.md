@@ -23,6 +23,10 @@ textview -图文-点击
 http://blog.csdn.net/baiyuliang2013/article/details/53538118
 http://blog.csdn.net/gemgaozhen/article/details/54289574
 ```
+```
+android中adb 5037端口被占用
+https://www.cnblogs.com/yunxixi/p/7170965.html
+```
 
 ```
 简书搜索
