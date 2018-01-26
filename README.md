@@ -18,6 +18,10 @@ jcenter太慢
 http://blog.csdn.net/linglingchenchen/article/details/62236723
 jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
+```
+textview -图文-点击
+http://blog.csdn.net/baiyuliang2013/article/details/53538118
+```
 
 ```
 简书搜索
