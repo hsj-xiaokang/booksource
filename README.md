@@ -19,6 +19,20 @@ http://blog.csdn.net/linglingchenchen/article/details/62236723
 jcenter(){ url 'http://jcenter.bintray.com/'}
 ```
 ```
+textview -图文-点击
+http://blog.csdn.net/baiyuliang2013/article/details/53538118
+http://blog.csdn.net/gemgaozhen/article/details/54289574
+```
+```
+android中adb 5037端口被占用
+https://www.cnblogs.com/yunxixi/p/7170965.html
+```
+
+```
+简书搜索
+Android UI Library
+```
+```
 color
 今天自定义一个控件，设置背景颜色时犯难了
 
@@ -44,6 +58,13 @@ setBackgroundColor(android.graphics.Color.argb(127, 255,0, 255));
 录音和播放-github-搜索
 AudioRecord录音 AudioTrack播放
 ```
+
+```
+BottomDialog 一个自定义的从底部弹出的dialog，仿照微博的分享弹框
+https://www.jianshu.com/p/c917dd73b3d5
+https://github.com/Curzibn/BottomDialog
+```
+
 ```
 android.support.v7.widget.Toolbar
 ```
