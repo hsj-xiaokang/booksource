@@ -18,6 +18,11 @@ http://blog.csdn.net/lvshuchangyin/article/details/52523465
 ```
 
 ```
+在线预览文件
+http://blog.csdn.net/hemengguang/article/details/78112035
+```
+
+```
 jcenter太慢
 http://blog.csdn.net/linglingchenchen/article/details/62236723
 jcenter(){ url 'http://jcenter.bintray.com/'}
