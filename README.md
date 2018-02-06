@@ -20,6 +20,8 @@ http://blog.csdn.net/lvshuchangyin/article/details/52523465
 ```
 在线预览文件
 http://blog.csdn.net/hemengguang/article/details/78112035
+http://blog.csdn.net/hemengguang/article/details/78112035
+https://github.com/ZhongXiaoHong/superFileView
 ```
 
 ```
